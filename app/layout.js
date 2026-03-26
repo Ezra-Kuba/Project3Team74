@@ -1,8 +1,8 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "Hello World App",
-  description: "Simple Next.js hello world app",
+  title: "Point of Access",
+  description: "Self-serve customer endpoint",
 };
 
 export default function RootLayout({ children }) {
