@@ -4,17 +4,17 @@ export default function Home() {
   return (
     <main className="menu-page">
       <header className="menu-header">
-        <Link className="employee-login" href="/login">
+        <Link className="employee-login" href="/login?role=customer">
           Customer Login
         </Link>
       </header>
       <header>
-        <Link className="employee-login" href="/login">
+        <Link className="employee-login" href="/login?role=cashier">
           Cashier Login
         </Link>
       </header>
       <header>
-        <Link className="employee-login" href="/login">
+        <Link className="employee-login" href="/login?role=manager">
           Manager Login
         </Link>
       </header>
