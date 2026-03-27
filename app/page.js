@@ -12,7 +12,7 @@ export default function Home() {
 
       <section className="menu-hero" aria-labelledby="menu-title">
         <p className="menu-label"></p>
-        <h1 id="menu-title">Self-Serve Customer Functionality Here this is our portal page, We need this i</h1>
+        <h1 id="menu-title">Welcome!<br></br>Please select the proper login page using the buttons above!</h1>
       </section>
     </main>
   );
