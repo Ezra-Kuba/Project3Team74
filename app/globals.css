@@ -31,12 +31,15 @@ h1 {
   padding: 24px;
 }
 
-.menu-header {
+/*.menu-header {
   display: flex;
   justify-content: flex-end;
-}
+  
+  
+}*/
 
 .employee-login {
+  margin-right:5px;
   display: inline-block;
   padding: 10px 16px;
   border: 1px solid #d1d5db;
