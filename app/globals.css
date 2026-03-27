@@ -25,7 +25,7 @@ h1 {
 }
 
 .menu-page {
-  min-height: 100vh;
+  min-height: 60vh;
   display: flex;
   flex-direction: column;
   padding: 24px;
@@ -52,9 +52,14 @@ h1 {
 .menu-hero {
   flex: 1;
   display: grid;
-  place-items: center;
+  place-items: top;
   text-align: center;
   padding: 24px;
+}
+
+.menu-img img{
+  width: 33.33%;
+  padding: 15px;
 }
 
 .menu-label {
