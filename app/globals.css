@@ -141,3 +141,93 @@ h1 {
     padding: 24px;
   }
 }
+
+.customer-pos-page {
+  display: flex;
+  min-height: 100vh;
+  background-color: #e9e9e9;
+}
+
+.customer-sidebar {
+  width: 180px;
+  background-color: #7d7d7d;
+  padding: 16px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.customer-category-button {
+  background: white;
+  border: 1px solid #cfcfcf;
+  border-radius: 4px;
+  padding: 12px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.customer-menu-section {
+  flex: 1;
+  padding: 24px;
+}
+
+.customer-menu-title {
+  font-size: 32px;
+  font-weight: bold;
+  margin-bottom: 24px;
+  color: #222;
+}
+
+.customer-item-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 140px);
+  gap: 16px;
+}
+
+.customer-item-card {
+  height: 120px;
+  background: #efefef;
+  border: 1px solid #cfcfcf;
+  border-radius: 4px;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 10px;
+}
+
+.customer-order-panel {
+  width: 260px;
+  background-color: #b3b3b3;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.customer-order-title {
+  color: green;
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+
+.customer-order-box {
+  flex: 1;
+  background: #f8f8f8;
+  border-radius: 24px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+.customer-order-placeholder {
+  color: #666;
+  font-size: 15px;
+}
+
+.customer-total-button {
+  background: green;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 14px;
+  font-size: 18px;
+  font-weight: bold;
+}
