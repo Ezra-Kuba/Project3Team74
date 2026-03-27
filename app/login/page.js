@@ -1,19 +1,20 @@
 "use client"; // Required for client-side interactivity
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react"; // 1. Import useState for our error message
+import { useState, Suspense } from "react"; // Added Suspense here
 
-export default function LoginPage() {
+// 1. Rename your main logic function so it's not the default export anymore
+function LoginContent() {
   const router = useRouter();
   
-  // 2. Safely extract the role from the URL using the Next.js hook
+  // Safely extract the role from the URL using the Next.js hook
   const searchParams = useSearchParams();
   const role = searchParams.get("role") || "customer"; 
 
-  // 3. Create a state variable to hold any login errors
+  // Create a state variable to hold any login errors
   const [errorMessage, setErrorMessage] = useState("");
 
-  // Mock database
+  // Your Mock database
   const mockUsers = {
     manager: { username: "Pete", password: "admin" },
     cashier: { username: "Drew", password: "11" },
@@ -37,15 +38,15 @@ export default function LoginPage() {
   const loginHandler = (e) => {
     e.preventDefault(); 
 
-    // 4. Use FormData to easily grab what the user typed into the inputs
+    // Use FormData to easily grab what the user typed into the inputs
     const formData = new FormData(e.target);
     const enteredUsername = formData.get("username");
     const enteredPassword = formData.get("password");
 
-    // 5. Look up the correct credentials for whichever role is trying to log in
+    // Look up the correct credentials for whichever role is trying to log in
     const validCredentials = mockUsers[role];
 
-    // 6. Compare the typed credentials against our hardcoded ones
+    // Compare the typed credentials against our hardcoded ones
     if (
       validCredentials && 
       enteredUsername === validCredentials.username && 
@@ -60,7 +61,7 @@ export default function LoginPage() {
       } else if (role === "cashier") {
         router.push("/cashierGUI");
       } else {
-        router.push("/customerGUI"); // Adjusted this to go to a customer page
+        router.push("/customerGUI"); 
       }
     } else {
       // FAILURE! Update our state to show an error message
@@ -91,7 +92,7 @@ export default function LoginPage() {
             />
           </label>
 
-          {/* 7. Conditionally render the error message if one exists */}
+          {/* Conditionally render the error message if one exists */}
           {errorMessage && (
             <p style={{ color: "red", fontSize: "14px", marginTop: "10px" }}>
               {errorMessage}
@@ -102,5 +103,14 @@ export default function LoginPage() {
         </form>
       </section>
     </main>
+  );
+}
+
+// 2. Create the new default export that wraps your logic in <Suspense>
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <LoginContent />
+    </Suspense>
   );
 }
