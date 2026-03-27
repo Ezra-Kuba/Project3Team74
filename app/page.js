@@ -16,7 +16,7 @@ export default function Home() {
 
       <section className="menu-img">
         <img src="/image.png"></img>  
-        <img src="/image.png"></img> 
+        <img src="/jesse.png"></img> 
         <img src="/image.png"></img>
       </section> 
 
