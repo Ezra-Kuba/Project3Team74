@@ -66,6 +66,14 @@ h1 {
   letter-spacing: 0.08em;
 }
 
+.landingPageBottomSection{
+  margin-left: 50px;
+}
+
+/* .landingPageBottomButton{
+  padding:5px;
+} */
+
 .login-page {
   min-height: 100vh;
   display: flex;

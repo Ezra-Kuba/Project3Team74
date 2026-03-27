@@ -14,6 +14,11 @@ export default function Home() {
         <p className="menu-label"></p>
         <h1 id="menu-title">Welcome!<br></br>Please select the proper login page using the buttons above!</h1>
       </section>
+
+      <section className = "landingPageBottomSection">
+        <h4 className = "landingPageBottomHeader">These r examples buttons that will link to other pages. Implementation needs fixing later:</h4>
+        <Link className = "landingPageBottomButtons" href="/menu">example menu button</Link>
+      </section>
     </main>
   );
 }
