@@ -12,7 +12,7 @@ export default function Home() {
 
       <section className="menu-hero" aria-labelledby="menu-title">
         <p className="menu-label"></p>
-        <h1 id="menu-title">Welcome!<br></br>Please select the proper login page using the buttons above!</h1>
+        <h1 id="menu-title">Welcome!<br></br>Page in progress!</h1>
       </section>
 
       <section className = "landingPageBottomSection">

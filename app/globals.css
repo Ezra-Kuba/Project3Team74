@@ -31,23 +31,22 @@ h1 {
   padding: 24px;
 }
 
-/*.menu-header {
+.menu-header {
   display: flex;
-  justify-content: flex-end;
-  
-  
-}*/
+  justify-content: center;
+  gap: 22%; 
+}
 
 .employee-login {
-  margin-right:5px;
   display: inline-block;
-  padding: 10px 16px;
+  padding: 12px 28px;
   border: 1px solid #d1d5db;
-  border-radius: 6px;
+  border-radius: 12px;
   background: #ffffff;
   color: #111827;
   text-decoration: none;
-  font-size: 0.95rem;
+  font-size: 15px;
+  
 }
 
 .menu-hero {
