@@ -60,7 +60,7 @@ export default function LoginPage() {
       } else if (role === "cashier") {
         router.push("/cashierGUI");
       } else {
-        router.push("/CustomerGUI"); // Adjusted this to go to a customer page
+        router.push("/customerGUI"); // Adjusted this to go to a customer page
       }
     } else {
       // FAILURE! Update our state to show an error message
