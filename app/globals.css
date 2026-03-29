@@ -246,3 +246,87 @@ h1 {
   font-size: 18px;
   font-weight: bold;
 }
+
+.manager-page {
+  min-height: 100vh;
+  padding: 32px;
+  background: #eef2f7;
+}
+
+.manager-shell {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 28px;
+  border: 1px solid #d7deea;
+  border-radius: 20px;
+  background: #ffffff;
+}
+
+.manager-header {
+  margin-bottom: 24px;
+}
+
+.manager-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.manager-tab {
+  padding: 12px 18px;
+  border: 1px solid #cbd5e1;
+  border-radius: 999px;
+  background: #f8fafc;
+  color: #1e293b;
+  font: inherit;
+  cursor: pointer;
+}
+
+.manager-tab-active {
+  background: #111827;
+  color: #ffffff;
+  border-color: #111827;
+}
+
+.manager-panel {
+  min-height: 320px;
+  padding: 24px;
+  border-radius: 18px;
+  background: #f8fafc;
+}
+
+.manager-section-title {
+  margin: 0 0 8px;
+  font-size: 1.75rem;
+  color: #0f172a;
+}
+
+.manager-section-copy {
+  margin: 0 0 24px;
+  color: #475569;
+}
+
+.manager-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.manager-list-card {
+  display: grid;
+  gap: 10px;
+  padding: 18px;
+  border: 1px solid #dbe3ee;
+  border-radius: 14px;
+  background: #ffffff;
+}
+
+.manager-list-name {
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.manager-list-value {
+  color: #475569;
+}
