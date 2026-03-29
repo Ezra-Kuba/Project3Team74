@@ -1,3 +1,9 @@
+Dependencies
+
+npm install @react-oauth/google
+
+
+
 npm run dev to compile and run.
 
 Edit app folder for site changes
