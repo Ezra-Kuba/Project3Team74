@@ -7,6 +7,42 @@ import { useGoogleOAuthReady } from "../google-oauth-provider";
 
 const STORAGE_KEY = "google-oauth-user";
 
+async function fetchLoginRecord(username) {
+  const response = await fetch(
+    `/api/logins?username=${encodeURIComponent(username)}`,
+    {
+      method: "GET",
+      cache: "no-store",
+    }
+  );
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.error || "Login lookup failed.");
+  }
+
+  return data;
+}
+
+function getDestinationPath(loginRecord, fallbackRole) {
+  const role = loginRecord.permission || fallbackRole;
+
+  if (role === "manager") {
+    return "/managerGUI";
+  }
+
+  if (role === "cashier") {
+    return "/cashierGUI";
+  }
+
+  if (role === "admin") {
+    return "/admin";
+  }
+
+  return "/customerGUI";
+}
+
 function decodeJwt(token) {
   const base64Url = token.split(".")[1];
 
@@ -35,13 +71,6 @@ export default function LoginPage() {
   const [googleErrorMessage, setGoogleErrorMessage] = useState("");
   const [formErrorMessage, setFormErrorMessage] = useState("");
 
-  const mockUsers = {
-    manager: { username: "Pete", password: "admin" },
-    cashier: { username: "Drew", password: "11" },
-    customer: { username: "Bob", password: "yes" },
-    admin: { username: "jorgeoliver909@tamu.edu", password: "admin" },
-  };
-
   let displayTitle = "Welcome!";
   let subtitle = "Enter your credentials or continue with Google.";
 
@@ -67,28 +96,24 @@ export default function LoginPage() {
     }
   }, []);
 
-  const handleSuccess = (credentialResponse) => {
+  const handleSuccess = async (credentialResponse) => {
     try {
       const profile = decodeJwt(credentialResponse.credential);
+      const loginRecord = await fetchLoginRecord(profile.email);
       const nextUser = {
         name: profile.name,
         email: profile.email,
         picture: profile.picture,
       };
 
-      if (profile.email !== mockUsers.admin.username) {
-        setGoogleErrorMessage("This Google account is not authorized for the admin portal.");
-        setUser(null);
-        window.localStorage.removeItem(STORAGE_KEY);
-        return;
-      }
-
       window.localStorage.setItem(STORAGE_KEY, JSON.stringify(nextUser));
       setUser(nextUser);
       setGoogleErrorMessage("");
-      router.push("/admin");
+      router.push(getDestinationPath(loginRecord, role));
     } catch {
-      setGoogleErrorMessage("Google login succeeded, but the profile could not be read.");
+      setUser(null);
+      window.localStorage.removeItem(STORAGE_KEY);
+      setGoogleErrorMessage("Google login failed. That email is not authorized.");
     }
   };
 
@@ -99,31 +124,24 @@ export default function LoginPage() {
     setGoogleErrorMessage("");
   };
 
-  const loginHandler = (e) => {
+  const loginHandler = async (e) => {
     e.preventDefault();
 
     const formData = new FormData(e.target);
     const enteredUsername = formData.get("username");
     const enteredPassword = formData.get("password");
-    const validCredentials = mockUsers[role];
 
-    if (
-      validCredentials &&
-      enteredUsername === validCredentials.username &&
-      enteredPassword === validCredentials.password
-    ) {
-      setFormErrorMessage("");
+    try {
+      const loginRecord = await fetchLoginRecord(enteredUsername);
 
-      if (role === "manager") {
-        router.push("/managerGUI");
-      } else if (role === "admin") {
-        router.push("/admin");
-      } else if (role === "cashier") {
-        router.push("/cashierGUI");
-      } else {
-        router.push("/customerGUI");
+      if (loginRecord.password !== enteredPassword) {
+        setFormErrorMessage("Incorrect username or password. Please try again.");
+        return;
       }
-    } else {
+
+      setFormErrorMessage("");
+      router.push(getDestinationPath(loginRecord, role));
+    } catch {
       setFormErrorMessage("Incorrect username or password. Please try again.");
     }
   };
