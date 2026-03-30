@@ -49,6 +49,17 @@ h1 {
   
 }
 
+.nav-bar-items{
+  display: inline-block;
+  padding: 6px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+  background: #0f0c0c;
+  color: #111827;
+  text-decoration: none;
+  font-size: 15px; 
+}
+
 .menu-hero {
   flex: 1;
   display: grid;
@@ -60,6 +71,7 @@ h1 {
 .menu-img img{
   width: 33.33%;
   padding: 15px;
+  border-radius: 10px;
 }
 
 .menu-label {
@@ -74,11 +86,12 @@ h1 {
   display: flex;
   justify-content: space-between; /* Pushes logo to left, links to right */
   align-items: center;
-  background-color: #333;
+  background-color: #e74e12;
   color: white;
-  padding: 1rem 2rem;
+  padding: 1rem 1rem;
   position: sticky; /* Keeps it at the top as you scroll */
   top: 0;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
 /* Logo */
@@ -94,7 +107,7 @@ h1 {
 }
 
 .nav-links li {
-  margin-left: 20px;
+  margin-left: 22px;
 }
 
 .nav-links a {
