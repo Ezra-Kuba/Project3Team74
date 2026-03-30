@@ -39,6 +39,14 @@ export default function CustomerGUI() {
     };
   }, []);
 
+  function addToOrder(itemName, price) {
+    setOrderItems((prevItems) => [...prevItems, { itemName, price }]);
+  }
+
+  const [orderItems, setOrderItems] = useState([]);
+
+  const total = orderItems.reduce((sum, item) => sum + parseFloat(item.price), 0).toFixed(2);
+
   return (
     <main className="customer-pos-page">
       <aside className="customer-sidebar">
@@ -61,7 +69,7 @@ export default function CustomerGUI() {
 
         <div className="customer-item-grid">
           {items.map((item) => (
-            <button key={item.item_name} className="customer-item-card">
+            <button key={item.item_name} className="customer-item-card" onClick={() => addToOrder(item.item_name, item.price)}>
               <span className="menu-item-name">{item.item_name}</span>
               <span className="menu-item-price">${Number(item.price).toFixed(2)}</span>
             </button>
@@ -73,10 +81,16 @@ export default function CustomerGUI() {
         <h2 className="customer-order-title">Current Order</h2>
 
         <div className="customer-order-box">
-          <p className="customer-order-placeholder">No items selected yet.</p>
+          {orderItems.length === 0 ? (
+            <p className="customer-order-placeholder">No items selected yet.</p>
+          ) : (
+            orderItems.map((item, index) => (
+              <p key={index}> {item.itemName} - ${Number(item.price).toFixed(2)}</p>
+            ))
+          )}
         </div>
 
-        <button className="customer-total-button">Total: $0.00</button>
+        <button className="customer-total-button">Total: ${total}</button>
       </aside>
     </main>
   );
