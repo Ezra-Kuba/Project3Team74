@@ -126,6 +126,8 @@ export default function ManagerGUI() {
     };
   }, [activeTab]);
 
+  const [clickedEmployee, setClickedEmployee] = useState(null);
+
   return (
 
 
@@ -223,14 +225,24 @@ export default function ManagerGUI() {
                 <p className="customer-order-placeholder">Loading employee information...</p>
               ) : null}
 
+
               <div className="manager-list">
                 {employees.map((item) => (
-                  <article key={item.employee_name} className="manager-list-card">
+                  <article key={item.employee_name} 
+                    onClick={() => setClickedEmployee(item.employee_id_num)}
+                    className="manager-list-card">
                     <span className="manager-list-name">{item.employee_name}</span>
                     <span className="manager-list-value">Employee ID: {item.employee_id_num}</span>
+                    {clickedEmployee === item.employee_id_num &&(
+                      <div>
+                      <div>Manager Status: {item.manager ? "Yes" : "No"}</div>
+                      <div>Password: {item.employee_password}</div>
+                    </div>
+                    )}
                   </article>
                 ))}
               </div>
+
             </>
           ) : null}
 
