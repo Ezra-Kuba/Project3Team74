@@ -131,150 +131,7 @@ export default function ManagerGUI() {
     };
   }, [activeTab]);
 
-  const REPORT_OPTIONS = [
-    { label: "Daily Sales", value: "total_sales_per_day", needsRange: false },
-    { label: "Daily Sales by Time", value: "sales_report_by_time", needsRange: true },
-    { label: "Least Popular Item", value: "least_ordered_item", needsRange: false },
-    { label: "Most Popular Item", value: "top_selling", needsRange: false },
-    { label: "X Report", value: "x_report", needsRange: false },
-    { label: "Z Report", value: "total_orders_and_sales_today", needsRange: false },
-    { label: "Inventory Chart", value: "product_usage", needsRange: true },
-  ];
-
-  const formatReportLabel = (label) =>
-    label
-      .replace(/_/g, " ")
-      .replace(/\b\w/g, (char) => char.toUpperCase());
-
-  const formatReportValue = (key, value) => {
-    if (value === null || value === undefined) {
-      return "-";
-    }
-
-    if (typeof value === "number") {
-      const formatted = value.toLocaleString("en-US", {
-        maximumFractionDigits: 2,
-      });
-
-      return key.includes("sales") || key.includes("value")
-        ? `$${formatted}`
-        : formatted;
-    }
-
-    return String(value);
-  };
-
-  const getSelectedReport = () =>
-    REPORT_OPTIONS.find((option) => option.value === reportType);
-
-  const generateReport = async () => {
-    setReportError("");
-    setReportRows([]);
-
-    const selectedReport = getSelectedReport();
-
-    if (!selectedReport) {
-      setReportError("Please choose a valid report.");
-      return;
-    }
-
-    if (selectedReport.needsRange) {
-      if (!timeStart || !timeEnd) {
-        setReportError("Please provide both start and end timestamps.");
-        return;
-      }
-
-      if (timeStart > timeEnd) {
-        setReportError("Start time must be before end time.");
-        return;
-      }
-    }
-
-    if (reportType === "total_orders_and_sales_today") {
-      const confirmed = window.confirm(
-        "Run Z Report? This will return today's totals."
-      );
-
-      if (!confirmed) {
-        return;
-      }
-    }
-
-    try {
-      setReportSubmitted(true);
-      setReportLoading(true);
-
-      const response = await fetch("/api/reports", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          reportType,
-          timeStart,
-          timeEnd,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || "Failed to generate report.");
-      }
-
-      setReportRows(data.rows || []);
-    } catch (error) {
-      setReportError(error instanceof Error ? error.message : "Failed to generate report.");
-    } finally {
-      setReportLoading(false);
-    }
-  };
-
-  const renderReportResults = () => {
-    if (!reportRows || reportRows.length === 0) {
-      return null;
-    }
-
-    const rowKeys = Object.keys(reportRows[0] || {});
-
-    if (reportRows.length === 1 && rowKeys.length <= 4) {
-      return (
-        <article className="manager-list-card">
-          {rowKeys.map((key) => (
-            <div key={key}>
-              <span className="manager-list-name">{formatReportLabel(key)}</span>
-              <span className="manager-list-value">
-                {formatReportValue(key, reportRows[0][key])}
-              </span>
-            </div>
-          ))}
-        </article>
-      );
-    }
-
-    return (
-      <div className="manager-report-table-wrapper">
-        <table className="manager-report-table">
-          <thead>
-            <tr>
-              {rowKeys.map((key) => (
-                <th key={key}>{formatReportLabel(key)}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {reportRows.map((row, rowIndex) => (
-              <tr key={rowIndex}>
-                {rowKeys.map((key) => (
-                  <td key={key}>{formatReportValue(key, row[key])}</td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    );
-  };
+  const [clickedEmployee, setClickedEmployee] = useState(null);
 
   return (
     <main className="manager-page">
@@ -358,14 +215,24 @@ export default function ManagerGUI() {
                 <p className="customer-order-placeholder">Loading employee information...</p>
               ) : null}
 
+
               <div className="manager-list">
                 {employees.map((item) => (
-                  <article key={item.employee_name} className="manager-list-card">
+                  <article key={item.employee_name} 
+                    onClick={() => setClickedEmployee(item.employee_id_num)}
+                    className="manager-list-card">
                     <span className="manager-list-name">{item.employee_name}</span>
                     <span className="manager-list-value">Employee ID: {item.employee_id_num}</span>
+                    {clickedEmployee === item.employee_id_num &&(
+                      <div>
+                      <div>Manager Status: {item.manager ? "Yes" : "No"}</div>
+                      <div>Password: {item.employee_password}</div>
+                    </div>
+                    )}
                   </article>
                 ))}
               </div>
+
             </>
           ) : null}
 
