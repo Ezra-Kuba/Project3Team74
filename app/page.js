@@ -10,7 +10,7 @@ export default function Home() {
       <nav class="navbar">
         <div class="logo">Supa Yummi Boba</div>
         <ul class="nav-links">
-          <li><a className="nav-bar-items" href="/app">Home</a></li>
+          <li><a className="nav-bar-items" href="/">Home</a></li>
           <li><a className="nav-bar-items" href="#about">About</a></li>
           <li><a className="nav-bar-items" href="#menu">Menu</a></li>
           <li><a className="nav-bar-items" href="#contact">Contact</a></li>
