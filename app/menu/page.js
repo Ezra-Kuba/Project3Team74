@@ -7,10 +7,10 @@ export default function MenuGUI() {
     <main className="menu-page">
       <nav class="navbar">
         <div class="logo">Supa Yummi Boba</div>
-        <ul class="nav-links">
+        <ul className="nav-links">
           <li><a className="nav-bar-items" href="/">Home</a></li>
           <li><a className="nav-bar-items" href="#about">About</a></li>
-          <li><a className="nav-bar-items" href="/">Menu</a></li>
+          <li><a className="nav-bar-items" href="/menu">Menu</a></li>
           <li><a className="nav-bar-items" href="#contact">Contact</a></li>
           <li><a className="nav-bar-items" href="/login">Login</a></li>
         </ul>
