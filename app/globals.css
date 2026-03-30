@@ -287,6 +287,8 @@ h1 {
 .menu-item-price {
   font-size: 15px;
   color: #4b5563;
+  float: right;
+  padding-right: 10em;
 }
 
 .customer-order-panel {
