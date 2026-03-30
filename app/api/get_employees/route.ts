@@ -46,7 +46,7 @@ async function getEmployees(employeeName?: string) {
   const result = await pool.query(`
     SELECT employee_id_num, manager, employee_name, employee_password
     FROM employee_list
-    ORDER BY manager DESC
+    ORDER BY employee_id_num ASC
   `);
 
   return result.rows;
