@@ -16,6 +16,7 @@ export default function ManagerGUI() {
   const [reportRows, setReportRows] = useState([]);
   const [reportError, setReportError] = useState("");
   const [reportLoading, setReportLoading] = useState(false);
+  const [reportSubmitted, setReportSubmitted] = useState(false);
   const [timeStart, setTimeStart] = useState("");
   const [timeEnd, setTimeEnd] = useState("");
 
@@ -200,6 +201,7 @@ export default function ManagerGUI() {
     }
 
     try {
+      setReportSubmitted(true);
       setReportLoading(true);
 
       const response = await fetch("/api/reports", {
@@ -430,9 +432,11 @@ export default function ManagerGUI() {
                 <p className="customer-order-placeholder">Generating report...</p>
               ) : null}
 
-              {!reportLoading && reportRows.length === 0 ? (
+              {!reportLoading && reportRows.length === 0 && !reportError ? (
                 <p className="customer-order-placeholder">
-                  Choose a report and click Generate Report.
+                  {reportSubmitted
+                    ? "No results found for this report."
+                    : "Choose a report and click Generate Report."}
                 </p>
               ) : null}
 
