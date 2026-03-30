@@ -59,7 +59,7 @@ export default function CustomerGUI() {
       <nav className="navbar">
         <div className="logo">Supa Yummi Boba</div>
         <ul className="nav-links">
-          <li><a className="nav-bar-items" href="/">Home</a></li>
+          {/* <li><a className="nav-bar-items" href="/">Home</a></li> */}
           <li><a className="nav-bar-items" href="#about">About</a></li>
           <li><a className="nav-bar-items" href="/menu">Menu</a></li>
           <li><a className="nav-bar-items" href="#contact">Contact</a></li>
