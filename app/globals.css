@@ -71,7 +71,8 @@ h1 {
 .menu-img img{
   width: 33.33%;
   padding: 15px;
-  border-radius: 10px;
+  border-radius: 0px;
+  background-color: #e74e12;
 }
 
 .menu-label {

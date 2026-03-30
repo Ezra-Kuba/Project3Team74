@@ -10,7 +10,7 @@ export default function Home() {
       <nav class="navbar">
         <div class="logo">Supa Yummi Boba</div>
         <ul class="nav-links">
-          <li><a className="nav-bar-items" href="#home">Home</a></li>
+          <li><a className="nav-bar-items" href="/app">Home</a></li>
           <li><a className="nav-bar-items" href="#about">About</a></li>
           <li><a className="nav-bar-items" href="#menu">Menu</a></li>
           <li><a className="nav-bar-items" href="#contact">Contact</a></li>
@@ -30,7 +30,9 @@ export default function Home() {
       </section> 
 
       <section className = "landingPageBottomSection">
-        <h4 className = "landingPageBottomHeader">These r examples buttons that will link to other pages. Implementation needs fixing later:</h4>
+        <h4 className = "landingPageBottomHeader">
+          Here at Supa Yummi Boba
+        </h4>
         <Link className = "landingPageBottomButtons" href="/menu">example menu button</Link>
       </section>
     </main>

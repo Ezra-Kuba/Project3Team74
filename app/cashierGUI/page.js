@@ -56,6 +56,8 @@ export default function CashierGUI() {
         <button className="customer-category-button">Specials</button>
       </aside>
 
+      
+
       <section className="customer-menu-section">
         <h1 className="customer-menu-title">Cashier Menu</h1>
 

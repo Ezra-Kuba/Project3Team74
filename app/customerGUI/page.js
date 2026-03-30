@@ -56,6 +56,17 @@ export default function CustomerGUI() {
         <button className="customer-category-button">Specials</button>
       </aside>
 
+      <nav class="navbar">
+        <div class="logo">Supa Yummi Boba</div>
+        <ul class="nav-links">
+          <li><a className="nav-bar-items" href="/app">Home</a></li>
+          <li><a className="nav-bar-items" href="#about">About</a></li>
+          <li><a className="nav-bar-items" href="#menu">Menu</a></li>
+          <li><a className="nav-bar-items" href="#contact">Contact</a></li>
+          <li><a className="nav-bar-items" href="/login">Login</a></li>
+        </ul>
+      </nav>
+
       <section className="customer-menu-section">
         <h1 className="customer-menu-title">Customer Menu</h1>
 
