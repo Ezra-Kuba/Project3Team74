@@ -43,6 +43,32 @@ export default function CashierGUI() {
     setOrderItems((prevItems) => [...prevItems, { itemName, price }]);
   }
 
+  async function placeOrder(){
+    try{
+      const response = await fetch("/api/place_order", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ items: orderItems }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok){
+        throw new Error(data.error || "Failed to place order.");
+      }
+
+    alert("Order placed!");
+
+    setOrderItems([]);
+    } catch (error) {
+      console.error("Error placing order:", error);
+      alert("Failed to place order.");
+    }
+    
+  }
+
   const [orderItems, setOrderItems] = useState([]);
 
   const total = orderItems.reduce((sum, item) => sum + parseFloat(item.price), 0).toFixed(2);
@@ -92,7 +118,7 @@ export default function CashierGUI() {
           )}
         </div>
 
-        <button className="customer-total-button">Total: ${total}</button>
+        <button className="customer-total-button" onClick={() => placeOrder(orderItems)}>Total: ${total}</button>
       </aside>
     </main>
   );
