@@ -3,9 +3,9 @@ import Link from "next/link";
 export default function Home() {
   return (
     <main className="menu-page">
-      <header className="menu-header">
+      {/* <header className="menu-header">
         <Link className="employee-login" href="/login">Login</Link>
-      </header>
+      </header> */}
 
       <nav class="navbar">
         <div class="logo">BrandName</div>
@@ -14,6 +14,7 @@ export default function Home() {
           <li><a href="#about">About</a></li>
           <li><a href="#services">Services</a></li>
           <li><a href="#contact">Contact</a></li>
+          <li><a className="employee-login" href="/login">Login</a></li>
         </ul>
       </nav>
 
