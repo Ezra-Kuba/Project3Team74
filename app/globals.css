@@ -70,6 +70,45 @@ h1 {
   letter-spacing: 0.08em;
 }
 
+.navbar {
+  display: flex;
+  justify-content: space-between; /* Pushes logo to left, links to right */
+  align-items: center;
+  background-color: #333;
+  color: white;
+  padding: 1rem 2rem;
+  position: sticky; /* Keeps it at the top as you scroll */
+  top: 0;
+}
+
+/* Logo */
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+/* List of links */
+.nav-links {
+  display: flex;
+  list-style: none;
+}
+
+.nav-links li {
+  margin-left: 20px;
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: color 0.3s;
+}
+
+/* Hover effect */
+.nav-links a:hover {
+  color: #ff9900;
+}
+
 .landingPageBottomSection{
   margin-left: 50px;
 }
