@@ -10,6 +10,8 @@ export default function ManagerGUI() {
   const [inventoryError, setInventoryError] = useState("");
   const [menuItems, setMenuItems] = useState([]);
   const [menuError, setMenuError] = useState("");
+  const [employees, setEmployees] = useState([]);
+  const [employeeError, setEmployeeError] = useState("");
 
   useEffect(() => {
     if (activeTab !== "inventory") {
@@ -48,6 +50,7 @@ export default function ManagerGUI() {
     };
   }, [activeTab]);
 
+
   useEffect(() => {
     if (activeTab !== "menu") {
       return;
@@ -79,6 +82,44 @@ export default function ManagerGUI() {
     }
 
     loadMenuItems();
+
+    return () => {
+      isActive = false;
+    };
+  }, [activeTab]);
+
+
+  useEffect(() => {
+    if (activeTab !== "employees") {
+      return;
+    }
+
+    let isActive = true;
+
+    async function loadEmployees() {
+      try {
+        const response = await fetch("/api/get_employees", {
+          method: "GET",
+          cache: "no-store",
+        });
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || "Failed to load employees.");
+        }
+
+        if (isActive) {
+          setEmployees(data);
+          setEmployeeError("");
+        }
+      } catch {
+        if (isActive) {
+          setInventoryError("Failed to retrieve employee information.");
+        }
+      }
+    }
+
+    loadEmployees();
 
     return () => {
       isActive = false;
@@ -174,9 +215,22 @@ export default function ManagerGUI() {
           {activeTab === "employees" ? (
             <>
               <h2 className="manager-section-title">Employees</h2>
-              <p className="manager-section-copy">
-                Employee tools will go here.
-              </p>
+              {employeeError ? (
+                <p className="customer-order-placeholder">{employeeError}</p>
+              ) : null}
+
+              {!employeeError && employees.length === 0 ? (
+                <p className="customer-order-placeholder">Loading employee information...</p>
+              ) : null}
+
+              <div className="manager-list">
+                {employees.map((item) => (
+                  <article key={item.employee_name} className="manager-list-card">
+                    <span className="manager-list-name">{item.employee_name}</span>
+                    <span className="manager-list-value">Employee ID: {item.employee_id_num}</span>
+                  </article>
+                ))}
+              </div>
             </>
           ) : null}
 
