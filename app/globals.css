@@ -401,6 +401,71 @@ h1 {
   background: #ffffff;
 }
 
+.manager-list-card > div {
+  display: grid;
+  gap: 8px;
+}
+
+.manager-list-card > div + div {
+  margin-top: 12px;
+}
+
+.manager-report-controls {
+  display: grid;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.manager-report-range-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.manager-report-controls label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.manager-report-controls select,
+.manager-report-controls input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #ffffff;
+  font: inherit;
+  color: inherit;
+}
+
+.manager-report-table-wrapper {
+  overflow-x: auto;
+}
+
+.manager-report-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #ffffff;
+}
+
+.manager-report-table th,
+.manager-report-table td {
+  padding: 12px 14px;
+  border: 1px solid #e2e8f0;
+  text-align: left;
+}
+
+.manager-report-table th {
+  background: #f1f5f9;
+  font-weight: 700;
+}
+
+.manager-report-table tr:nth-child(even) {
+  background: #f8fafc;
+}
+
 .manager-list-name {
   font-weight: 600;
   color: #0f172a;
