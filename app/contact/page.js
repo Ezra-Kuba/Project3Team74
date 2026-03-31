@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export default function AboutPage() {
+export default function ContactPage() {
   return (
     <main className="about-page">
     <nav class="navbar">
@@ -13,9 +13,15 @@ export default function AboutPage() {
         </ul>
     </nav>
     <section className="image and paragraph">
-        <h1>About us</h1>
-        <img src="/jesse.png"></img>
-        <p>this is a fake biography about founder Jesse Ashen.</p>
+        <h1>Contact info</h1>
+        <img src="/image.png" alt="Our founders in their natrual habitat"></img>
+        <ul class ="contact bar">
+            <li><a href="jvashen@tamu.edu">Jesse Ashen</a></li>
+            <li><a href="jorgeoliver909@tamu.edu">Jorge Lebron Oliver</a></li>
+            <li><a href="rodroman@tamu.edu">Roman Rodriguez</a></li>
+            <li><a href="rohakb@tamu.edu">Rohak Brahma</a></li>
+            <li><a href="ezra_k234@tamu.edu">Ezra Kuba</a></li>
+        </ul>
     </section>
     </main>
   );

@@ -264,11 +264,15 @@ h1 {
 }
 
 .menu-mainScreen{
-  background-color:#cfcfcf;
+  background-color: #e74e12;
   border-radius: 8px;
-  margin-left:100px;
-  margin-right:100px;
-  padding-left: 50px;
+  border-width: 6cqmax;
+  border-color: black;
+  margin-left:5%;
+  margin-right:5%;
+  padding-left: 5%;
+  background-blend-mode: hard-light;
+  
 }
 
 
@@ -285,8 +289,8 @@ h1 {
 }
 
 .menu-item-price {
-  font-size: 15px;
-  color: #4b5563;
+  font-size: 1.1em;
+  color: black;
   float: right;
   padding-right: 10em;
 }
