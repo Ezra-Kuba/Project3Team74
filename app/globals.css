@@ -477,3 +477,18 @@ h1 {
 .manager-list-value {
   color: #475569;
 }
+
+.about-page {
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: small;
+  float: left;
+  text-align: center;
+
+}
+
+.about-page img {
+  width: 33.33%;
+  padding: 15px;
+  border-radius: 0px;
+  background-color: #e74e12;
+}
