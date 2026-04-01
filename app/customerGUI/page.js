@@ -76,19 +76,16 @@ export default function CustomerGUI() {
       {/* <div className="p-6"> */}
     {/* 1. Header with the very first item (Current Weather) */}
 
-   {weather.length > 0 ? (
-  <div className="current-weather-banner">
-    <h2>Current Temperature: {weather[0].temp}°F</h2>
-    <p>Chance of Rain: {weather[0].rainChance}%</p>
-  </div>
-) : (
-  <div className="current-weather-banner">
-    <p>Loading weather...</p>
-  </div>
-)}
-
       <nav className="navbar">
         <div className="logo">Supa Yummi Boba</div>
+        <div className="weather">
+        {weather.length > 0 && (
+          <>
+          <h2>Current Temperature: {weather[0].temp}°F</h2>
+          <p>Chance of Rain: {weather[0].rainChance}%</p>
+          </>
+        )}
+        </div>
         <ul className="nav-links">
           {/* <li><a className="nav-bar-items" href="/">Home</a></li> */}
           <li><a className="nav-bar-items" href="/about">About</a></li>
