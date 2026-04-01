@@ -1,7 +1,7 @@
 "use client";
 
 import { GoogleLogin, googleLogout } from "@react-oauth/google";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useGoogleOAuthReady } from "../google-oauth-provider";
 
@@ -64,6 +64,7 @@ function decodeJwt(token) {
 
 export default function LoginPage() {
   const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
   const role = searchParams.get("role") || "customer";
   const isGoogleOAuthReady = useGoogleOAuthReady();
@@ -116,6 +117,22 @@ export default function LoginPage() {
       setGoogleErrorMessage("Google login failed. That email is not authorized.");
     }
   };
+
+  const goToManager = () => {
+    const newPath = pathname.replace("/login", "/managerGUI");
+    router.push(newPath);
+    
+  }
+
+  const goToEmployee = () => {
+    const newPath = pathname.replace("/login", "/employeeGUI");
+    router.push(newPath);
+  }
+
+  const goToCustomer = () => {
+    const newPath = pathname.replace("/login", "/customerGUI");
+    router.push(newPath);
+  }
 
   const handleLogout = () => {
     googleLogout();
@@ -203,6 +220,16 @@ export default function LoginPage() {
           {user ? (
             <>
               <p style={{ margin: 0, fontWeight: 600 }}>You are already logged in.</p>
+              <p style={{ margin: 0, fontWeight: 600 }}>Select the screen you want to go to below</p>
+              <button onClick = {() => goToCustomer()}>
+                Customer Screen
+              </button>
+              <button onClick = {() => goToManager()}>
+                Manager Screen
+              </button>
+              <button onClick = {() => goToEmployee()}>
+                Employee Screen
+              </button>
               <p style={{ margin: 0, color: "#4b5563" }}>
                 Use logout below to switch accounts.
               </p>
