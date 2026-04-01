@@ -482,6 +482,7 @@ h1 {
   color: #475569;
 }
 
+
 .about-page {
   font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   font-size: small;
@@ -495,4 +496,11 @@ h1 {
   padding: 15px;
   border-radius: 0px;
   background-color: #e74e12;
+}
+
+#fireButton {
+  color: white;
+  background-color: red;
+  margin-top: 30px;
+  justify-content: center;
 }
