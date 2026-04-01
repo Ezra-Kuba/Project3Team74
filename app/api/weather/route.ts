@@ -21,19 +21,26 @@ export async function GET() {
     const hourly = response.hourly()!;
     const daily = response.daily()!;
 
-    // Process the binary data into a clean JSON object
+    // 1. Calculate which index represents the current hour
+    const nowInSeconds = Math.floor(Date.now() / 1000);
+    const startOfArray = Number(hourly.time());
+    const currentHourIndex = Math.floor((nowInSeconds - startOfArray) / hourly.interval());
+
+    // 2. Build the array starting from 'currentHourIndex' instead of 0
     const weatherArray = Array.from(
-      { length: 24 }, // Just grab the next 24 hours to keep it light
-      (_, i) => ({
-        time: new Date((Number(hourly.time()) + i * hourly.interval() + utcOffsetSeconds) * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        temp: Math.round(hourly.variables(0)!.valuesArray()[i]),
-        rainChance: hourly.variables(1)!.valuesArray()[i],
-      })
+      { length: 24 }, // Still grab 24 hours of data
+      (_, i) => {
+        const actualIndex = currentHourIndex + i; // Shift the index forward
+        
+        return {
+          time: new Date((Number(hourly.time()) + actualIndex * hourly.interval() + utcOffsetSeconds) * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          temp: Math.round(hourly.variables(0).valuesArray()[actualIndex]),
+          rainChance: hourly.variables(1).valuesArray()[actualIndex],
+        };
+      }
     );
 
-    // Return the array to your React frontend
     return NextResponse.json(weatherArray);
-    
   } catch (error) {
     return NextResponse.json({ error: "Failed to fetch weather" }, { status: 500 });
   }
