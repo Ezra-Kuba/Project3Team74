@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 
 export default function CustomerGUI() {
   const [items, setItems] = useState([]);
+  const [weather, setWeather] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
@@ -39,6 +40,22 @@ export default function CustomerGUI() {
     };
   }, []);
 
+  useEffect(() => {
+    let isActive = true;
+    async function loadWeather() {
+      try {
+        const response = await fetch("/api/weather", { cache: "no-store" });
+        const data = await response.json();
+        if (isActive && response.ok) setWeather(data);
+      } catch (err) {
+        if (isActive) console.error("Weather failed to load.");
+      }
+    }
+    loadWeather();
+    return () => { isActive = false; };
+  }, []);
+
+
   function addToOrder(itemName, price) {
     setOrderItems((prevItems) => [...prevItems, { itemName, price }]);
   }
@@ -55,6 +72,20 @@ export default function CustomerGUI() {
         <button className="customer-category-button">Fruit Teas</button>
         <button className="customer-category-button">Specials</button>
       </aside>
+
+      {/* <div className="p-6"> */}
+    {/* 1. Header with the very first item (Current Weather) */}
+
+   {weather.length > 0 ? (
+  <div className="current-weather-banner">
+    <h2>Current Temperature: {weather[0].temp}°F</h2>
+    <p>Chance of Rain: {weather[0].rainChance}%</p>
+  </div>
+) : (
+  <div className="current-weather-banner">
+    <p>Loading weather...</p>
+  </div>
+)}
 
       <nav className="navbar">
         <div className="logo">Supa Yummi Boba</div>
