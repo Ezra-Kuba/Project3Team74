@@ -97,7 +97,6 @@ h1 {
   left: 0;
   width: 100%;
   z-index: 1000;
-  margin-bottom: 10%;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
@@ -272,7 +271,7 @@ h1 {
   margin-right:5%;
   padding-left: 5%;
   background-blend-mode: hard-light;
-  
+
 }
 
 
