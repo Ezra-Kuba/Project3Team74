@@ -81,8 +81,10 @@ export default function CustomerGUI() {
         <div className="weather">
         {weather.length > 0 && (
           <>
-          <h2>Current Temperature: {weather[0].temp}°F</h2>
-          <p>Chance of Rain: {weather[0].rainChance}%</p>
+          {/* <h2>Temperature: {weather[0].temp}°F</h2> */}
+          <p>Chance of Rain: {weather[0].rainChance}%, 
+            Current Temperature:{weather[0].temp}°F
+          </p>
           </>
         )}
         </div>
