@@ -1,6 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Modal from '@mui/material/Modal';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 
 const TABS = ["inventory", "menu", "employees", "reports"];
 
@@ -130,6 +133,7 @@ export default function ManagerGUI() {
       isActive = false;
     };
   }, [activeTab]);
+
 
   const REPORT_OPTIONS = [
     { label: "Daily Sales", value: "total_sales_per_day", needsRange: false },
@@ -279,6 +283,24 @@ export default function ManagerGUI() {
   };
 
   const [clickedEmployee, setClickedEmployee] = useState(null);
+  const [isModalOpen, setOpen] = useState(false);
+  const handleClose = () => {
+    setOpen(false)
+  };
+  const selectedEmployee = employees.find(e => e.employee_id_num === clickedEmployee);
+
+  const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 300,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+  };
+
 
   return (
     <main className="manager-page">
@@ -366,20 +388,36 @@ export default function ManagerGUI() {
               <div className="manager-list">
                 {employees.map((item) => (
                   <article key={item.employee_name} 
-                    onClick={() => setClickedEmployee(item.employee_id_num)}
+                    onClick={() => {
+                      setClickedEmployee(item.employee_id_num); 
+                      setOpen(true)
+                    }}
                     className="manager-list-card">
                     <span className="manager-list-name">{item.employee_name}</span>
                     <span className="manager-list-value">Employee ID: {item.employee_id_num}</span>
-                    {clickedEmployee === item.employee_id_num &&(
-                      <div>
-                      <div>Manager Status: {item.manager ? "Yes" : "No"}</div>
-                      <div>Password: {item.employee_password}</div>
-                    </div>
-                    )}
                   </article>
                 ))}
               </div>
-
+              {isModalOpen && selectedEmployee && (
+                <Modal
+                  open={isModalOpen}
+                  onClose={handleClose}
+                  aria-labelledby="Employee Information"
+                  aria-describedby="modal-modal-description"
+                >
+                  <Box sx={style}>
+                    <Typography id="modal-modal-title" variant="h6" component="h2">
+                      {selectedEmployee.employee_name}
+                    </Typography>
+                    <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                      Employee ID: {selectedEmployee.employee_id_num}<br></br>
+                      Manager: {selectedEmployee.manager ? 'Yes' : 'No'}<br></br>
+                      Password: {selectedEmployee.employee_password}<br></br>
+                    </Typography>
+                    <button id="fireButton" onClick={() => confirm("Are you sure you want to fire this single mother of 7? This action cannot be undone.")}>Fire Employee</button>
+                  </Box>
+                </Modal>
+              )}
             </>
           ) : null}
 
