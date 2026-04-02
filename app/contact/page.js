@@ -1,6 +1,27 @@
+"use client";
+
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 export default function ContactPage() {
+    const [weather, setWeather] = useState([]);
+    const [errorMessage, setErrorMessage] = useState("");
+
+    useEffect(() => {
+      let isActive = true;
+      async function loadWeather() {
+        try {
+          const response = await fetch("/api/weather", { cache: "no-store" });
+          const data = await response.json();
+          if (isActive && response.ok) setWeather(data);
+        } catch (err) {
+          if (isActive) console.error("Weather failed to load.");
+        }
+      }
+      loadWeather();
+      return () => { isActive = false; };
+    }, []);
+
   return (
     <main className="about-page">
     <nav class="navbar">

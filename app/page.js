@@ -1,6 +1,27 @@
+"use client";
+
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 export default function Home() {
+    const [weather, setWeather] = useState([]);
+    const [errorMessage, setErrorMessage] = useState("");
+
+    useEffect(() => {
+      let isActive = true;
+      async function loadWeather() {
+        try {
+          const response = await fetch("/api/weather", { cache: "no-store" });
+          const data = await response.json();
+          if (isActive && response.ok) setWeather(data);
+        } catch (err) {
+          if (isActive) console.error("Weather failed to load.");
+        }
+      }
+      loadWeather();
+      return () => { isActive = false; };
+    }, []);
+
   return (
     <main className="menu-page">
       {/* <header className="menu-header">
@@ -9,6 +30,16 @@ export default function Home() {
 
       <nav className="navbar">
         <div className="logo">Supa Yummi Boba</div>
+        <div className="weather">
+        {weather.length > 0 && (
+          <>
+          {/* <h2>Temperature: {weather[0].temp}°F</h2> */}
+          <p>Chance of Rain: {weather[0].rainChance}%, 
+            Current Temperature:{weather[0].temp}°F
+          </p>
+          </>
+        )}
+        </div>
         <ul className="nav-links">
           <li><a className="nav-bar-items" href="/">Home</a></li>
           <li><a className="nav-bar-items" href="/about">About</a></li>
