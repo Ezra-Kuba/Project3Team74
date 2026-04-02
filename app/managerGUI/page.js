@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import { useEffect, useState } from "react";
 
 const TABS = ["inventory", "menu", "employees", "reports"];
 
@@ -289,6 +288,7 @@ export default function ManagerGUI() {
     setOpen(false)
   };
   const selectedEmployee = employees.find(e => e.employee_id_num === clickedEmployee);
+  const [editableEmployee, setEditableEmployee] = useState(null);
 
   const style = {
     position: 'absolute',
@@ -391,6 +391,7 @@ export default function ManagerGUI() {
                   <article key={item.employee_name} 
                     onClick={() => {
                       setClickedEmployee(item.employee_id_num); 
+                      setEditableEmployee({...item});
                       setOpen(true)
                     }}
                     className="manager-list-card">
@@ -407,15 +408,33 @@ export default function ManagerGUI() {
                   aria-describedby="modal-modal-description"
                 >
                   <Box sx={style}>
-                    <Typography id="modal-modal-title" variant="h6" component="h2">
-                      {selectedEmployee.employee_name}
+                    <Typography variant="h6" component="h2">
+                      Employee Information
                     </Typography>
                     <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                      Employee Name: <input type="text" 
+                                            value={editableEmployee.employee_name} 
+                                            style={{width:"100px", border: "1px solid #000"}}
+                                            onChange={(e) => setEditableEmployee({...editableEmployee, employee_name: e.target.value})}
+                                      />
+                      <br></br>
                       Employee ID: {selectedEmployee.employee_id_num}<br></br>
-                      Manager: {selectedEmployee.manager ? 'Yes' : 'No'}<br></br>
-                      Password: {selectedEmployee.employee_password}<br></br>
+                      Manager: <input type="checkbox"
+                                      checked={editableEmployee.manager}
+                                      onChange={(e) => setEditableEmployee({...editableEmployee, manager: e.target.checked})}
+                                />
+                      <br></br>
+                      Password: <input  type="text" 
+                                        value={editableEmployee.employee_password} 
+                                        style={{width:"50px", border: "1px solid #000"}}
+                                        onChange={(e) => setEditableEmployee({...editableEmployee, employee_password: e.target.value})}
+                                />
+                      <br></br>
                     </Typography>
-                    <button id="fireButton" onClick={() => confirm("Are you sure you want to fire this single mother of 7? This action cannot be undone.")}>Fire Employee</button>
+                    <div id="employeeButtons">
+                      <button id="saveChanges" onClick={() => confirm("Are you sure you want to fire this single mother of 7? This action cannot be undone.")}>Save</button>
+                      <button id="fireButton" onClick={() => confirm("Are you sure you want to fire this single mother of 7? This action cannot be undone.")}>Fire Employee</button>
+                    </div>
                   </Box>
                 </Modal>
               )}
