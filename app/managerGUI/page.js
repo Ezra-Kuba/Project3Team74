@@ -312,7 +312,30 @@ export default function ManagerGUI() {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || "Failed to load employees.");
+        throw new Error(data.error || "Failed to update employee information.");
+      }
+
+      // Refresh employee list after the save is made
+      await loadEmployees();
+    }
+
+    // Show popup if an error occurs
+    catch(error){
+      alert(error.message);
+    }
+  }
+
+  async function fireEmployee(employee){
+    try {
+      const response = await fetch("/api/remove_employee", {
+        method: "DELETE",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(employee), // send unfortunate employee
+      });
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to fire employee.");
       }
 
       // Refresh employee list after the save is made
@@ -472,7 +495,12 @@ export default function ManagerGUI() {
                               }}>
                               Save
                       </button>
-                      <button id="removeButton" onClick={() => confirm("Are you sure you want to fire this single mother of 7? This action cannot be undone.")}>Fire Employee</button>
+                      <button id="removeButton" 
+                              onClick={() => {
+                                confirm("Are you sure you want to fire this employee?\nThis action cannot be undone.")
+                                fireEmployee(selectedEmployee);
+                              }}>
+                              Fire Employee</button>
                     </div>
                   </Box>
                 </Modal>
