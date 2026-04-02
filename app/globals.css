@@ -104,6 +104,10 @@ h1 {
 .logo {
   font-size: 1.5rem;
   font-weight: bold;
+  background-image: url('/chineseDragon.jpg');
+  background-size: cover; 
+  background-position: center;
+  color: black;
 }
 
 /* List of links */
@@ -209,7 +213,7 @@ h1 {
 
 .customer-sidebar {
   width: 180px;
-  background-color: #7d7d7d;
+  background-color: #e74e12;
   padding: 16px 8px;
   display: flex;
   flex-direction: column;
@@ -217,12 +221,14 @@ h1 {
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
+
 .customer-category-button {
-  background: white;
-  border: 1px solid #cfcfcf;
-  border-radius: 4px;
+  background: black;
+  border: 1px solid white;
+  border-radius: 12px;
   padding: 12px;
   font-size: 16px;
+  color: white;
   cursor: pointer;
   font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
@@ -296,14 +302,14 @@ h1 {
 
 .customer-order-panel {
   width: 260px;
-  background-color: #b3b3b3;
+  /* background-color: #efefef; */
   padding: 16px;
   display: flex;
   flex-direction: column;
 }
 
 .customer-order-title {
-  color: green;
+  color: black;
   font-size: 20px;
   font-weight: bold;
   margin-bottom: 16px;
@@ -323,10 +329,10 @@ h1 {
 }
 
 .customer-total-button {
-  background: green;
+  background: #e74e12;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 12px;
   padding: 14px;
   font-size: 18px;
   font-weight: bold;
@@ -481,6 +487,7 @@ h1 {
   color: #475569;
 }
 
+
 .about-page {
   font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   font-size: small;
@@ -494,4 +501,11 @@ h1 {
   padding: 15px;
   border-radius: 0px;
   background-color: #e74e12;
+}
+
+#fireButton {
+  color: white;
+  background-color: red;
+  margin-top: 30px;
+  justify-content: center;
 }
