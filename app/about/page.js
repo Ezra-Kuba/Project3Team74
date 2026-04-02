@@ -5,6 +5,16 @@ export default function AboutPage() {
     <main className="about-page">
     <nav class="navbar">
         <div class="logo">Supa Yummi Boba</div>
+        <div className="weather">
+        {weather.length > 0 && (
+          <>
+          {/* <h2>Temperature: {weather[0].temp}°F</h2> */}
+          <p>Chance of Rain: {weather[0].rainChance}%, 
+            Current Temperature:{weather[0].temp}°F
+          </p>
+          </>
+        )}
+        </div>
         <ul class="nav-links">
           <li><a className="nav-bar-items" href="/about">About</a></li>
           <li><a className="nav-bar-items" href="/menu">Menu</a></li>
