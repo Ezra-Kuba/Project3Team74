@@ -496,8 +496,14 @@ h1 {
 
 }
 
+.about-body p{
+  font-size: 2em;
+  margin: 3em;
+}
+
 .about-page img {
   width: 33.33%;
+  margin: 1em;
   padding: 15px;
   border-radius: 0px;
   background-color: #e74e12;
