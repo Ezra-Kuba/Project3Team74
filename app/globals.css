@@ -509,10 +509,15 @@ h1 {
   background-color: #e74e12;
 }
 
-#fireButton {
+#employeeButtons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+}
+
+#removeButton {
   color: white;
   background-color: red;
-  margin-top: 30px;
   justify-content: center;
 }
 

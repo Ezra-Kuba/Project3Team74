@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useCallback } from "react";
 import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -97,42 +98,39 @@ export default function ManagerGUI() {
     };
   }, [activeTab]);
 
-  useEffect(() => {
-    if (activeTab !== "employees") {
-      return;
-    }
+  const loadEmployees = useCallback(async (isActive = true) => {
+    try {
+      const response = await fetch("/api/get_employees", {
+        method: "GET",
+        cache: "no-store",
+      });
+      const data = await response.json();
 
-    let isActive = true;
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to load employees.");
+      }
 
-    async function loadEmployees() {
-      try {
-        const response = await fetch("/api/get_employees", {
-          method: "GET",
-          cache: "no-store",
-        });
-        const data = await response.json();
-
-        if (!response.ok) {
-          throw new Error(data.error || "Failed to load employees.");
-        }
-
-        if (isActive) {
-          setEmployees(data);
-          setEmployeeError("");
-        }
-      } catch {
-        if (isActive) {
-          setEmployeeError("Failed to retrieve employee information.");
-        }
+      if (isActive) {
+        setEmployees(data);
+        setEmployeeError("");
+      }
+    } catch {
+      if (isActive) {
+        setEmployeeError("Failed to retrieve employee information.");
       }
     }
+  }, []);
 
-    loadEmployees();
+  useEffect(() => {
+  if (activeTab !== "employees") return;
 
-    return () => {
-      isActive = false;
-    };
-  }, [activeTab]);
+  let isActive = true;
+  loadEmployees(isActive);
+
+  return () => {
+    isActive = false;
+  };
+}, [activeTab, loadEmployees]);
 
 
   const REPORT_OPTIONS = [
@@ -289,6 +287,8 @@ export default function ManagerGUI() {
   };
   const selectedEmployee = employees.find(e => e.employee_id_num === clickedEmployee);
   const [editableEmployee, setEditableEmployee] = useState(null);
+  // Comparison test for objects, if any values do not match then true is returned
+  const hasChanges = (a, b) => Object.keys(a).some(key => b[key] !== a[key]);
 
   const style = {
     position: 'absolute',
@@ -301,6 +301,29 @@ export default function ManagerGUI() {
     boxShadow: 24,
     p: 4,
   };
+
+  async function updateEmployee(employee) {
+    try {
+      const response = await fetch("/api/edit_employee", {
+        method: "PUT",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(employee), // send editableEmployee
+      });
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to load employees.");
+      }
+
+      // Refresh employee list after the save is made
+      await loadEmployees();
+    }
+
+    // Show popup if an error occurs
+    catch(error){
+      alert(error.message);
+    }
+  }
 
 
   return (
@@ -432,8 +455,24 @@ export default function ManagerGUI() {
                       <br></br>
                     </Typography>
                     <div id="employeeButtons">
-                      <button id="saveChanges" onClick={() => confirm("Are you sure you want to fire this single mother of 7? This action cannot be undone.")}>Save</button>
-                      <button id="fireButton" onClick={() => confirm("Are you sure you want to fire this single mother of 7? This action cannot be undone.")}>Fire Employee</button>
+                      <button id="saveButton" 
+                              disabled = {!hasChanges(selectedEmployee, editableEmployee)}
+                              onClick={() => {
+                                if(editableEmployee.employee_name === "" || editableEmployee.employee_password === ""){
+                                  alert("Invalid Input(s): Fields cannot be left blank!");
+                                  return;
+                                }
+                                
+                                // If inputs are valid call update function
+                                updateEmployee(editableEmployee);
+                                alert("Employee information has been updated");
+
+                                // Close modal once done
+                                setOpen(false);
+                              }}>
+                              Save
+                      </button>
+                      <button id="removeButton" onClick={() => confirm("Are you sure you want to fire this single mother of 7? This action cannot be undone.")}>Fire Employee</button>
                     </div>
                   </Box>
                 </Modal>
