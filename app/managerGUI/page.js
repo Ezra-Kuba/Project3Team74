@@ -444,7 +444,7 @@ export default function ManagerGUI() {
                       Employee ID: {selectedEmployee.employee_id_num}<br></br>
                       Manager: <input type="checkbox"
                                       checked={editableEmployee.manager}
-                                      onChange={(e) => setEditableEmployee({...editableEmployee, manager: e.target.checked})}
+                                      onChange={(e) => setEditableEmployee({...editableEmployee, manager: e.target.checked ? 1 : 0})}
                                 />
                       <br></br>
                       Password: <input  type="text" 
