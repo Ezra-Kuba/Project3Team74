@@ -7,9 +7,9 @@ export default function Home() {
         <Link className="employee-login" href="/login">Login</Link>
       </header> */}
 
-      <nav class="navbar">
-        <div class="logo">Supa Yummi Boba</div>
-        <ul class="nav-links">
+      <nav className="navbar">
+        <div className="logo">Supa Yummi Boba</div>
+        <ul className="nav-links">
           <li><a className="nav-bar-items" href="/">Home</a></li>
           <li><a className="nav-bar-items" href="/about">About</a></li>
           <li><a className="nav-bar-items" href="/menu">Menu</a></li>
@@ -31,9 +31,16 @@ export default function Home() {
 
       <section className = "landingPageBottomSection">
         <h4 className = "landingPageBottomHeader">
-          Here at Supa Yummi Boba
+          Here at Supa Yummi Boba we value our customers needs!
         </h4>
-        <Link className = "landingPageBottomButtons" href="/menu">example menu button</Link>
+        <p>The buttons below will enable accessibility features:</p>
+        <button >
+          Toggle High Contrast
+        </button>
+        <p>This is a demo of the accessibility features. In the full version, this slider would adjust the font size.</p>
+        <div className="slidecontainer">
+          {/* <input type="range" min="1" max="100" value="50" className="slider" id="myRange"> */}
+        </div>
       </section>
     </main>
   );
