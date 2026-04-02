@@ -515,3 +515,26 @@ h1 {
   margin-top: 30px;
   justify-content: center;
 }
+
+.contactBar {
+  padding: 5px;
+  list-style-type: none;
+  font-size: 1.3em;
+
+}
+
+.contactItemList{
+  margin: 1.5em;
+  padding-bottom: 15px;
+}
+
+.contactItems {
+  color: black;
+  border-radius: 12px;
+  border-color:#00000014;
+  border-style: solid;
+  border-width: 3px;
+  
+  padding: 10px;
+  background-color: #f8f8f8;
+}

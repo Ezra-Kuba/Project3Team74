@@ -46,12 +46,12 @@ export default function ContactPage() {
     <section className="image and paragraph">
         <h1>Contact info</h1>
         <img src="/image.png" alt="Our founders in their natrual habitat"></img>
-        <ul class ="contact bar">
-            <li><a href="jvashen@tamu.edu">Jesse Ashen</a></li>
-            <li><a href="jorgeoliver909@tamu.edu">Jorge Lebron Oliver</a></li>
-            <li><a href="rodroman@tamu.edu">Roman Rodriguez</a></li>
-            <li><a href="rohakb@tamu.edu">Rohak Brahma</a></li>
-            <li><a href="ezra_k234@tamu.edu">Ezra Kuba</a></li>
+        <ul class ="contactBar">
+            <li class="contactItemList"><a class = "contactItems" href="jvashen@tamu.edu">Jesse Ashen</a></li>
+            <li class="contactItemList"><a class = "contactItems" href="jorgeoliver909@tamu.edu">Jorge Lebron Oliver</a></li>
+            <li class="contactItemList"><a class = "contactItems" href="rodroman@tamu.edu">Roman Rodriguez</a></li>
+            <li class="contactItemList"><a class = "contactItems" href="rohakb@tamu.edu">Rohak Brahma</a></li>
+            <li class="contactItemList"><a class = "contactItems" href="ezra_k234@tamu.edu">Ezra Kuba</a></li>
         </ul>
     </section>
     </main>
