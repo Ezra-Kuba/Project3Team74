@@ -398,6 +398,11 @@ h1 {
   color: #475569;
 }
 
+.manager-section-header{
+  display: flex;
+  justify-content: space-between;
+}
+
 .manager-list {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -509,13 +514,17 @@ h1 {
   background-color: #e74e12;
 }
 
-#employeeButtons {
+.addButton{
+  height: 30px;
+  font-size: 15px;
+}
+.managerButtons {
   display: flex;
   justify-content: space-between;
   margin-top: 30px;
 }
 
-#removeButton {
+.removeButton {
   color: white;
   background-color: red;
   justify-content: center;
@@ -525,7 +534,6 @@ h1 {
   padding: 5px;
   list-style-type: none;
   font-size: 1.3em;
-
 }
 
 .contactItemList{

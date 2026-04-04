@@ -281,10 +281,9 @@ export default function ManagerGUI() {
   };
 
   const [clickedEmployee, setClickedEmployee] = useState(null);
-  const [isModalOpen, setOpen] = useState(false);
-  const handleClose = () => {
-    setOpen(false)
-  };
+  // Universal modal handlers
+  const [openModal, setOpenModal] = useState(null);
+  const handleClose = () => setOpenModal(null);
   const selectedEmployee = employees.find(e => e.employee_id_num === clickedEmployee);
   const [editableEmployee, setEditableEmployee] = useState(null);
   // Comparison test for objects, if any values do not match then true is returned
@@ -347,6 +346,36 @@ export default function ManagerGUI() {
       alert(error.message);
     }
   }
+
+  async function hireEmployee(employee) {
+    try {
+      const response = await fetch("/api/add_employee", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(employee), // send editableEmployee
+      });
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to update employee information.");
+      }
+
+      // Refresh employee list after the save is made
+      await loadEmployees();
+    }
+
+    // Show popup if an error occurs
+    catch(error){
+      alert(error.message);
+    }
+  }
+
+  // New employee template
+  const newEmployee = {
+    employee_name: "",
+    manager: 0,
+    employee_password: ""
+  };
 
 
   return (
@@ -422,7 +451,19 @@ export default function ManagerGUI() {
 
           {activeTab === "employees" ? (
             <>
+            <div className="manager-section-header">
               <h2 className="manager-section-title">Employees</h2>
+              <button className="addButton"
+                      onClick={() => {
+                        {/* Set editable employee to empty template */}
+                        setEditableEmployee(newEmployee);
+                        setOpenModal("hireEmployee")
+                        }}>
+                      Hire Employee
+              </button>
+            </div>
+            
+            
               {employeeError ? (
                 <p className="customer-order-placeholder">{employeeError}</p>
               ) : null}
@@ -438,7 +479,7 @@ export default function ManagerGUI() {
                     onClick={() => {
                       setClickedEmployee(item.employee_id_num); 
                       setEditableEmployee({...item});
-                      setOpen(true)
+                      setOpenModal("editEmployee")
                     }}
                     className="manager-list-card">
                     <span className="manager-list-name">{item.employee_name}</span>
@@ -446,9 +487,10 @@ export default function ManagerGUI() {
                   </article>
                 ))}
               </div>
-              {isModalOpen && selectedEmployee && (
+              {/* Edit Employee Modal */}
+              {openModal === "editEmployee" && selectedEmployee && (
                 <Modal
-                  open={isModalOpen}
+                  open={openModal}
                   onClose={handleClose}
                   aria-labelledby="Employee Information"
                   aria-describedby="modal-modal-description"
@@ -477,8 +519,8 @@ export default function ManagerGUI() {
                                 />
                       <br></br>
                     </Typography>
-                    <div id="employeeButtons">
-                      <button id="saveButton" 
+                    <div className="managerButtons">
+                      <button className="saveButton" 
                               disabled = {!hasChanges(selectedEmployee, editableEmployee)}
                               onClick={() => {
                                 if(editableEmployee.employee_name === "" || editableEmployee.employee_password === ""){
@@ -491,16 +533,66 @@ export default function ManagerGUI() {
                                 alert("Employee information has been updated");
 
                                 // Close modal once done
-                                setOpen(false);
+                                handleClose();
                               }}>
                               Save
                       </button>
-                      <button id="removeButton" 
+                      <button className="removeButton" 
                               onClick={() => {
                                 confirm("Are you sure you want to fire this employee?\nThis action cannot be undone.")
                                 fireEmployee(selectedEmployee);
                               }}>
                               Fire Employee</button>
+                    </div>
+                  </Box>
+                </Modal>
+              )}
+
+              {/* Hire Employee Modal */}
+              {openModal === "hireEmployee" && (
+                <Modal
+                  open={openModal}
+                  onClose={handleClose}
+                  aria-labelledby="New Employee Information"
+                  aria-describedby="modal-modal-description"
+                >
+                  <Box sx={{...style, width: 400}}>
+                    <Typography variant="h6" component="h2">
+                      Enter New Employee Information
+                    </Typography>
+                    <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                      Employee Name: <input type="text" 
+                                            style={{width:"100px", border: "1px solid #000"}}
+                                            onChange={(e) => setEditableEmployee({...editableEmployee, employee_name: e.target.value})}
+                                      />
+                      <br></br>
+                      Manager: <input type="checkbox"
+                                      onChange={(e) => setEditableEmployee({...editableEmployee, manager: e.target.checked ? 1 : 0})}
+                                />
+                      <br></br>
+                      Password: <input  type="text" 
+                                        style={{width:"50px", border: "1px solid #000"}}
+                                        onChange={(e) => setEditableEmployee({...editableEmployee, employee_password: e.target.value})}
+                                />
+                      <br></br>
+                    </Typography>
+                    <div className="managerButtons">
+                      <button className="saveButton" 
+                              onClick={() => {
+                                if(editableEmployee.employee_name === "" || editableEmployee.employee_password === ""){
+                                  alert("Invalid Input(s): Fields cannot be left blank!");
+                                  return;
+                                }
+                                
+                                // If inputs are valid call update function
+                                updateEmployee(editableEmployee);
+                                alert("Employee information has been updated");
+
+                                // Close modal once done
+                                handleClose();
+                              }}>
+                              Save
+                      </button>
                     </div>
                   </Box>
                 </Modal>
