@@ -408,6 +408,29 @@ export default function ManagerGUI() {
     }
   }
 
+  async function removeMenuItem(item){
+    try {
+      const response = await fetch("/api/remove_menu_item", {
+        method: "DELETE",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(item), // send outdated trash menu item
+      });
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to remove menu item.");
+      }
+
+      // Refresh menu item list after the save is made
+      await loadEmployees();
+    }
+
+    // Show popup if an error occurs
+    catch(error){
+      alert(error.message);
+    }
+  }
+
     async function addNewMenu(item) {
     try {
       const response = await fetch("/api/add_menu_item", {
@@ -577,7 +600,7 @@ export default function ManagerGUI() {
                       <button className="removeButton" 
                               onClick={() => {
                                 confirm("Are you sure you want to remove this menu item?\nThis action cannot be undone.")
-                                fireEmployee(selectedEmployee);
+                                removeMenuItem(selectedMenuItem);
                               }}>
                               Remove Item</button>
                     </div>

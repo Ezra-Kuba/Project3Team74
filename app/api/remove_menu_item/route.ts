@@ -26,31 +26,29 @@ function getPool() {
   return globalForPg.menuItemsPool;
 }
 
-async function updateMenuItem(item, ogName) {
+async function removeMenuItem(item) {
     const pool = getPool();
     const result = await pool.query(
         `
-        UPDATE menu_items_list
-        SET item_name = $1, price = $2, inventory_cost = $3
-        WHERE item_name = $4
+        DELETE FROM menu_items_list
+        WHERE item_name = $1
         `,
-        [item.item_name, item.price, item.inventory_cost, ogName]
+        [item.item_name]
     );
 
     return result.rowCount;
 }
 
 
-export async function PUT(request: NextRequest) {
-  const body = await request.json(); // Editable menu item from frontend
+export async function DELETE(request: NextRequest) {
+  const body = await request.json(); // Target item from frontend
   try {
-    const {ogName, ...item} = body;
-    const updatedRows = await updateMenuItem(item, ogName);
+    const updatedRows = await removeMenuItem(body);
     return NextResponse.json({success: true, updatedRows});
   } catch (error) {
-    console.error("Failed to update menu item:", error);
+    console.error("Failed to remove menu item:", error);
     return NextResponse.json(
-      { error: "Failed to update menu item" },
+      { error: "Failed to remove menu item" },
       { status: 500 }
     );
   }
