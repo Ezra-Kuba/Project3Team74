@@ -352,12 +352,12 @@ export default function ManagerGUI() {
       const response = await fetch("/api/add_employee", {
         method: "POST",
         headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(employee), // send editableEmployee
+        body: JSON.stringify(employee),
       });
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || "Failed to update employee information.");
+        throw new Error(data.error || "Failed to hire employee.");
       }
 
       // Refresh employee list after the save is made
@@ -371,7 +371,7 @@ export default function ManagerGUI() {
   }
 
   // New employee template
-  const newEmployee = {
+  const emptyEmployee = {
     employee_name: "",
     manager: 0,
     employee_password: ""
@@ -456,7 +456,7 @@ export default function ManagerGUI() {
               <button className="addButton"
                       onClick={() => {
                         {/* Set editable employee to empty template */}
-                        setEditableEmployee(newEmployee);
+                        setEditableEmployee(emptyEmployee);
                         setOpenModal("hireEmployee")
                         }}>
                       Hire Employee
@@ -553,7 +553,7 @@ export default function ManagerGUI() {
                 <Modal
                   open={openModal}
                   onClose={handleClose}
-                  aria-labelledby="New Employee Information"
+                  aria-labelledby="Enter New Employee Information"
                   aria-describedby="modal-modal-description"
                 >
                   <Box sx={{...style, width: 400}}>
@@ -585,8 +585,8 @@ export default function ManagerGUI() {
                                 }
                                 
                                 // If inputs are valid call update function
-                                updateEmployee(editableEmployee);
-                                alert("Employee information has been updated");
+                                hireEmployee(editableEmployee);
+                                alert("Employee has been hired!");
 
                                 // Close modal once done
                                 handleClose();

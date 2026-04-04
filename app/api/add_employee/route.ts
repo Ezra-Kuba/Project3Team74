@@ -35,7 +35,7 @@ async function addEmployee(employee) {
         VALUES (
             (
                 SELECT MIN(t.id)
-                FROM generate_series(0, (SELECT MAX(employee_id_num) + 1 FROM employee_list)) AS t(id)
+                FROM generate_series(1, (SELECT MAX(employee_id_num) + 1 FROM employee_list)) AS t(id)
                 WHERE t.id NOT IN (SELECT employee_id_num FROM employee_list)
             ),
             $1, $2, $3
