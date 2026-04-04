@@ -24,14 +24,7 @@ export default function ManagerGUI() {
   const [timeStart, setTimeStart] = useState("");
   const [timeEnd, setTimeEnd] = useState("");
 
-  useEffect(() => {
-    if (activeTab !== "inventory") {
-      return;
-    }
-
-    let isActive = true;
-
-    async function loadInventory() {
+  const loadInventory = useCallback(async (isActive = true) => {
       try {
         const response = await fetch("/api/get_inventory_items", {
           method: "GET",
@@ -52,14 +45,21 @@ export default function ManagerGUI() {
           setInventoryError("Failed to load inventory.");
         }
       }
+    }, []);
+
+  useEffect(() => {
+    if (activeTab !== "inventory") {
+      return;
     }
 
-    loadInventory();
+    let isActive = true;
+
+    loadInventory(isActive);
 
     return () => {
       isActive = false;
     };
-  }, [activeTab]);
+  }, [activeTab, loadInventory]);
 
   const loadMenuItems = useCallback(async (isActive = true) => {
     try {
@@ -455,11 +455,39 @@ export default function ManagerGUI() {
     }
   }
 
+  const selectedInventoryItem = inventoryItems.find(e => e.inventory_item === clickedItem);
+
   // New inventory item template
   const emptyInventory = {
     inventory_item: "",
     stock: 0
   };
+
+  async function updateInventoryItem(item) {
+    try {
+      const response = await fetch("/api/edit_inventory_item", {
+        method: "PUT",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+          ogName: selectedInventoryItem.inventory_item,
+          ...item
+        }), // Send new item params and old item name 
+      });
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to update inventory item.");
+      }
+
+      // Refresh menu item list after the save is made
+      await loadInventory();
+    }
+
+    // Show popup if an error occurs
+    catch(error){
+      alert(error.message);
+    }
+  }
 
 
   return (
@@ -522,57 +550,51 @@ export default function ManagerGUI() {
                 ))}
               </div>
 
-              {/* Edit Menu Item Modal */}
-              {openModal === "editMenuItem" && selectedMenuItem && (
+              {/* Edit Inventory Item Modal */}
+              {openModal === "editInventoryItem" && selectedInventoryItem && (
                 <Modal
-                  open={openModal}
+                  open={openModal === "editInventoryItem"}
                   onClose={handleClose}
                   aria-labelledby="Menu Item Information"
                   aria-describedby="modal-modal-description"
                 >
                   <Box sx={{...style, width:"400"}}>
                     <Typography variant="h6" component="h2">
-                      Menu Item Information
+                      Inventory Item Information
                     </Typography>
                     <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                      Menu Item Name: <input type="text" 
-                                            value={editableTemp.item_name} 
+                      Name: <input type="text" 
+                                            value={editableTemp.inventory_item} 
                                             style={{width:"100px", border: "1px solid #000"}}
-                                            onChange={(e) => setEditableTemp({...editableTemp, item_name: e.target.value})}
+                                            onChange={(e) => setEditableTemp({...editableTemp, inventory_item: e.target.value})}
                                       />
                       <br></br>
-                      Menu Item Price: $<input  type="number" 
+                      Stock: <input  type="number" 
                                           min="0"
-                                          step=".01"
-                                          value={editableTemp.price} 
-                                          style={{width:"55px", border: "1px solid #000"}}
-                                          onChange={(e) => setEditableTemp({...editableTemp, price: e.target.value})}
-                                />
-                      <br></br>
-                      Inventory Cost: <input  type="text" 
-                                        value={editableTemp.inventory_cost} 
-                                        style={{width:"150px", border: "1px solid #000"}}
-                                        onChange={(e) => setEditableTemp({...editableTemp, inventory_cost: e.target.value})}
+                                          step="100"
+                                          value={editableTemp.stock} 
+                                          style={{width:"80px", border: "1px solid #000"}}
+                                          onChange={(e) => setEditableTemp({...editableTemp, stock: e.target.value})}
                                 />
                       <br></br>
                     </Typography>
                     <div className="managerButtons">
                       <button className="saveButton" 
-                              disabled = {!hasChanges(selectedMenuItem, editableTemp)}
+                              disabled = {!hasChanges(selectedInventoryItem, editableTemp)}
                               onClick={() => {
-                                if(editableTemp.item_name === "" || editableTemp.inventory_cost === ""){
+                                if(editableTemp.inventory_item === ""){
                                   alert("Invalid Input(s): Fields cannot be left blank!");
                                   return;
                                 }
 
-                                if(!editableTemp.price || editableTemp.price <= 0){
+                                if(!editableTemp.stock || editableTemp.stock <= 0){
                                   alert("Invalid Input(s): Price cannot be negative or left blank!");
                                   return;
                                 }
                                 
                                 // If inputs are valid call update function
-                                updateMenuItem(editableTemp, selectedMenuItem.item_name);
-                                alert("Menu item has been updated");
+                                updateInventoryItem(editableTemp, selectedInventoryItem.inventory_item);
+                                alert("Inventory item has been updated");
 
                                 // Close modal once done
                                 handleClose();
@@ -692,7 +714,7 @@ export default function ManagerGUI() {
               {/* Edit Menu Item Modal */}
               {openModal === "editMenuItem" && selectedMenuItem && (
                 <Modal
-                  open={openModal}
+                  open={openModal === "editMenuItem"}
                   onClose={handleClose}
                   aria-labelledby="Menu Item Information"
                   aria-describedby="modal-modal-description"
@@ -702,13 +724,13 @@ export default function ManagerGUI() {
                       Menu Item Information
                     </Typography>
                     <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                      Menu Item Name: <input type="text" 
+                      Name: <input type="text" 
                                             value={editableTemp.item_name} 
                                             style={{width:"100px", border: "1px solid #000"}}
                                             onChange={(e) => setEditableTemp({...editableTemp, item_name: e.target.value})}
                                       />
                       <br></br>
-                      Menu Item Price: $<input  type="number" 
+                      Price: $<input  type="number" 
                                           min="0"
                                           step=".01"
                                           value={editableTemp.price} 
@@ -760,7 +782,7 @@ export default function ManagerGUI() {
               {/* Add New Menu Item Modal */}
               {openModal === "addMenu" && (
                 <Modal
-                  open={openModal}
+                  open={openModal === "addMenu"}
                   onClose={handleClose}
                   aria-labelledby="Enter New Menu Item Information"
                   aria-describedby="modal-modal-description"
@@ -770,12 +792,12 @@ export default function ManagerGUI() {
                       Enter New Menu Item Information
                     </Typography>
                     <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                       Menu Item Name: <input type="text" 
+                       Name: <input type="text" 
                                             style={{width:"100px", border: "1px solid #000"}}
                                             onChange={(e) => setEditableTemp({...editableTemp, item_name: e.target.value})}
                                       />
                       <br></br>
-                      Menu Item Price: $<input  type="number" 
+                      Price: $<input  type="number" 
                                           min="0"
                                           step=".01"
                                           style={{width:"55px", border: "1px solid #000"}}
@@ -859,7 +881,7 @@ export default function ManagerGUI() {
               {/* Edit Employee Modal */}
               {openModal === "editEmployee" && selectedEmployee && (
                 <Modal
-                  open={openModal}
+                  open={openModal === "editEmployee"}
                   onClose={handleClose}
                   aria-labelledby="Employee Information"
                   aria-describedby="modal-modal-description"
@@ -869,7 +891,7 @@ export default function ManagerGUI() {
                       Employee Information
                     </Typography>
                     <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                      Employee Name: <input type="text" 
+                      Name: <input type="text" 
                                             value={editableTemp.employee_name} 
                                             style={{width:"100px", border: "1px solid #000"}}
                                             onChange={(e) => setEditableTemp({...editableTemp, employee_name: e.target.value})}
@@ -920,7 +942,7 @@ export default function ManagerGUI() {
               {/* Hire Employee Modal */}
               {openModal === "hireEmployee" && (
                 <Modal
-                  open={openModal}
+                  open={openModal === "hireEmployee"}
                   onClose={handleClose}
                   aria-labelledby="Enter New Employee Information"
                   aria-describedby="modal-modal-description"
@@ -930,7 +952,7 @@ export default function ManagerGUI() {
                       Enter New Employee Information
                     </Typography>
                     <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                      Employee Name: <input type="text" 
+                      Name: <input type="text" 
                                             style={{width:"100px", border: "1px solid #000"}}
                                             onChange={(e) => setEditableTemp({...editableTemp, employee_name: e.target.value})}
                                       />
