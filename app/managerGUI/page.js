@@ -612,29 +612,29 @@ export default function ManagerGUI() {
                 </Modal>
               )}
 
-              {/* Add New Menu Item Modal */}
-              {openModal === "addMenu" && (
+              {/* Add New Inventory Item Modal */}
+              {openModal === "addInventory" && (
                 <Modal
-                  open={openModal}
+                  open={openModal === "addInventory"}
                   onClose={handleClose}
                   aria-labelledby="Enter New Menu Item Information"
                   aria-describedby="modal-modal-description"
                 >
                   <Box sx={{...style, width: 400}}>
                     <Typography variant="h6" component="h2">
-                      Enter New Menu Item Information
+                      Enter New Inventory Item Information
                     </Typography>
                     <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                       Menu Item Name: <input type="text" 
+                       Name: <input type="text" 
                                             style={{width:"100px", border: "1px solid #000"}}
-                                            onChange={(e) => setEditableTemp({...editableTemp, item_name: e.target.value})}
+                                            onChange={(e) => setEditableTemp({...editableTemp, inventory_item: e.target.value})}
                                       />
                       <br></br>
-                      Menu Item Price: $<input  type="number" 
+                      Stock: <input  type="number" 
                                           min="0"
-                                          step=".01"
+                                          step="100"
                                           style={{width:"55px", border: "1px solid #000"}}
-                                          onChange={(e) => setEditableTemp({...editableTemp, price: e.target.value})}
+                                          onChange={(e) => setEditableTemp({...editableTemp, stock: e.target.value})}
                                 />
                       <br></br>
                       Inventory Cost: <input  type="text" 
