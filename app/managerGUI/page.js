@@ -61,42 +61,39 @@ export default function ManagerGUI() {
     };
   }, [activeTab]);
 
-  useEffect(() => {
-    if (activeTab !== "menu") {
-      return;
-    }
+  const loadMenuItems = useCallback(async (isActive = true) => {
+    try {
+      const response = await fetch("/api/get_menu_items", {
+        method: "GET",
+        cache: "no-store",
+      });
+      const data = await response.json();
 
-    let isActive = true;
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to load menu items.");
+      }
 
-    async function loadMenuItems() {
-      try {
-        const response = await fetch("/api/get_menu_items", {
-          method: "GET",
-          cache: "no-store",
-        });
-        const data = await response.json();
-
-        if (!response.ok) {
-          throw new Error(data.error || "Failed to load menu items.");
-        }
-
-        if (isActive) {
-          setMenuItems(data);
-          setMenuError("");
-        }
-      } catch {
-        if (isActive) {
-          setMenuError("Failed to load menu items.");
-        }
+      if (isActive) {
+        setMenuItems(data);
+        setMenuError("");
+      }
+    } catch {
+      if (isActive) {
+        setMenuError("Failed to load menu items.");
       }
     }
+  }, []);
 
-    loadMenuItems();
+  useEffect(() => {
+    if (activeTab !== "menu") return;
+
+    let isActive = true;
+    loadMenuItems(isActive);
 
     return () => {
       isActive = false;
     };
-  }, [activeTab]);
+  }, [activeTab, loadMenuItems]);
 
   const loadEmployees = useCallback(async (isActive = true) => {
     try {
@@ -285,7 +282,7 @@ export default function ManagerGUI() {
   const [openModal, setOpenModal] = useState(null);
   const handleClose = () => setOpenModal(null);
   const selectedEmployee = employees.find(e => e.employee_id_num === clickedEmployee);
-  const [editableEmployee, setEditableEmployee] = useState(null);
+  const [editableTemp, setEditableTemp] = useState(null);
   // Comparison test for objects, if any values do not match then true is returned
   const hasChanges = (a, b) => Object.keys(a).some(key => b[key] !== a[key]);
 
@@ -377,6 +374,35 @@ export default function ManagerGUI() {
     employee_password: ""
   };
 
+  // New menu item template
+  const emptyMenu = {
+    item_name: "",
+    price: 0
+  };
+
+    async function addNewMenu(item) {
+    try {
+      const response = await fetch("/api/add_menu_item", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(item),
+      });
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to add new menu item.");
+      }
+
+      // Refresh employee list after the save is made
+      await loadMenuItems();
+    }
+
+    // Show popup if an error occurs
+    catch(error){
+      alert(error.message);
+    }
+  }
+
 
   return (
     <main className="manager-page">
@@ -426,7 +452,17 @@ export default function ManagerGUI() {
 
           {activeTab === "menu" ? (
             <>
+              <div className="manager-section-header">
               <h2 className="manager-section-title">Menu</h2>
+              <button className="addButton"
+                      onClick={() => {
+                        {/* Set editable employee to empty template */}
+                        setEditableTemp(emptyMenu);
+                        setOpenModal("addMenu")
+                        }}>
+                      Add Menu Item
+              </button>
+            </div>
 
               {menuError ? (
                 <p className="customer-order-placeholder">{menuError}</p>
@@ -456,7 +492,7 @@ export default function ManagerGUI() {
               <button className="addButton"
                       onClick={() => {
                         {/* Set editable employee to empty template */}
-                        setEditableEmployee(emptyEmployee);
+                        setEditableTemp(emptyEmployee);
                         setOpenModal("hireEmployee")
                         }}>
                       Hire Employee
@@ -478,7 +514,7 @@ export default function ManagerGUI() {
                   <article key={item.employee_name} 
                     onClick={() => {
                       setClickedEmployee(item.employee_id_num); 
-                      setEditableEmployee({...item});
+                      setEditableTemp({...item});
                       setOpenModal("editEmployee")
                     }}
                     className="manager-list-card">
@@ -501,35 +537,35 @@ export default function ManagerGUI() {
                     </Typography>
                     <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                       Employee Name: <input type="text" 
-                                            value={editableEmployee.employee_name} 
+                                            value={editableTemp.employee_name} 
                                             style={{width:"100px", border: "1px solid #000"}}
-                                            onChange={(e) => setEditableEmployee({...editableEmployee, employee_name: e.target.value})}
+                                            onChange={(e) => setEditableTemp({...editableTemp, employee_name: e.target.value})}
                                       />
                       <br></br>
                       Employee ID: {selectedEmployee.employee_id_num}<br></br>
                       Manager: <input type="checkbox"
-                                      checked={editableEmployee.manager}
-                                      onChange={(e) => setEditableEmployee({...editableEmployee, manager: e.target.checked ? 1 : 0})}
+                                      checked={editableTemp.manager}
+                                      onChange={(e) => setEditableTemp({...editableTemp, manager: e.target.checked ? 1 : 0})}
                                 />
                       <br></br>
                       Password: <input  type="text" 
-                                        value={editableEmployee.employee_password} 
+                                        value={editableTemp.employee_password} 
                                         style={{width:"50px", border: "1px solid #000"}}
-                                        onChange={(e) => setEditableEmployee({...editableEmployee, employee_password: e.target.value})}
+                                        onChange={(e) => setEditableTemp({...editableTemp, employee_password: e.target.value})}
                                 />
                       <br></br>
                     </Typography>
                     <div className="managerButtons">
                       <button className="saveButton" 
-                              disabled = {!hasChanges(selectedEmployee, editableEmployee)}
+                              disabled = {!hasChanges(selectedEmployee, editableTemp)}
                               onClick={() => {
-                                if(editableEmployee.employee_name === "" || editableEmployee.employee_password === ""){
+                                if(editableTemp.employee_name === "" || editableTemp.employee_password === ""){
                                   alert("Invalid Input(s): Fields cannot be left blank!");
                                   return;
                                 }
                                 
                                 // If inputs are valid call update function
-                                updateEmployee(editableEmployee);
+                                updateEmployee(editableTemp);
                                 alert("Employee information has been updated");
 
                                 // Close modal once done
@@ -563,29 +599,29 @@ export default function ManagerGUI() {
                     <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                       Employee Name: <input type="text" 
                                             style={{width:"100px", border: "1px solid #000"}}
-                                            onChange={(e) => setEditableEmployee({...editableEmployee, employee_name: e.target.value})}
+                                            onChange={(e) => setEditableTemp({...editableTemp, employee_name: e.target.value})}
                                       />
                       <br></br>
                       Manager: <input type="checkbox"
-                                      onChange={(e) => setEditableEmployee({...editableEmployee, manager: e.target.checked ? 1 : 0})}
+                                      onChange={(e) => setEditableTemp({...editableTemp, manager: e.target.checked ? 1 : 0})}
                                 />
                       <br></br>
                       Password: <input  type="text" 
                                         style={{width:"50px", border: "1px solid #000"}}
-                                        onChange={(e) => setEditableEmployee({...editableEmployee, employee_password: e.target.value})}
+                                        onChange={(e) => setEditableTemp({...editableTemp, employee_password: e.target.value})}
                                 />
                       <br></br>
                     </Typography>
                     <div className="managerButtons">
                       <button className="saveButton" 
                               onClick={() => {
-                                if(editableEmployee.employee_name === "" || editableEmployee.employee_password === ""){
+                                if(editableTemp.employee_name === "" || editableTemp.employee_password === ""){
                                   alert("Invalid Input(s): Fields cannot be left blank!");
                                   return;
                                 }
                                 
-                                // If inputs are valid call update function
-                                hireEmployee(editableEmployee);
+                                // If inputs are valid call hire function
+                                hireEmployee(editableTemp);
                                 alert("Employee has been hired!");
 
                                 // Close modal once done
