@@ -666,20 +666,20 @@ export default function ManagerGUI() {
                   aria-labelledby="Enter New Menu Item Information"
                   aria-describedby="modal-modal-description"
                 >
-                  <Box sx={{...style, width: 400}}>
+                  <Box sx={{...style, width: 450}}>
                     <Typography variant="h6" component="h2">
                       Enter New Inventory Item Information
                     </Typography>
                     <Typography id="modal-modal-description" sx={{ mt: 2 }}>
                        Name: <input type="text" 
-                                            style={{width:"100px", border: "1px solid #000"}}
+                                            style={{width:"200px", border: "1px solid #000"}}
                                             onChange={(e) => setEditableTemp({...editableTemp, inventory_item: e.target.value})}
                                       />
                       <br></br>
                       Stock: <input  type="number" 
                                           min="0"
                                           step="100"
-                                          style={{width:"55px", border: "1px solid #000"}}
+                                          style={{width:"80px", border: "1px solid #000"}}
                                           onChange={(e) => setEditableTemp({...editableTemp, stock: e.target.value})}
                                 />
                       <br></br>
