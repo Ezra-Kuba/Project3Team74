@@ -512,6 +512,29 @@ export default function ManagerGUI() {
     }
   }
 
+  async function removeInventoryItem(item){
+    try {
+      const response = await fetch("/api/remove_inventory_item", {
+        method: "DELETE",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(item), // all these functions are just copies with slight changes for each tab lol
+      });
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to remove inventory item.");
+      }
+
+      // Like the employee, inventory, and menu functions are identical other than small stuff
+      await loadInventory();
+    }
+
+    // Show popup if an error occurs
+    catch(error){
+      alert(error.message);
+    }
+  }
+
 
   return (
     <main className="manager-page">
@@ -626,8 +649,8 @@ export default function ManagerGUI() {
                       </button>
                       <button className="removeButton" 
                               onClick={() => {
-                                confirm("Are you sure you want to remove this menu item?\nThis action cannot be undone.")
-                                removeMenuItem(selectedMenuItem);
+                                confirm("Are you sure you want to remove this inventory item?\nThis action cannot be undone.")
+                                removeInventoryItem(selectedInventoryItem);
                               }}>
                               Remove Item</button>
                     </div>
