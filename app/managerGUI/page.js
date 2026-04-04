@@ -384,19 +384,22 @@ export default function ManagerGUI() {
 
   async function updateMenuItem(item) {
     try {
-      const response = await fetch("/api/edit_employee", {
+      const response = await fetch("/api/edit_menu_item", {
         method: "PUT",
         headers: {"Content-Type": "application/json"},
-        body: JSON.stringify(employee), // send editableEmployee
+        body: JSON.stringify({
+          ogName: selectedMenuItem.item_name,
+          ...item
+        }), // Send new item params and old item name 
       });
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || "Failed to update employee information.");
+        throw new Error(data.error || "Failed to update menu item.");
       }
 
-      // Refresh employee list after the save is made
-      await loadEmployees();
+      // Refresh menu item list after the save is made
+      await loadMenuItems();
     }
 
     // Show popup if an error occurs
@@ -563,8 +566,8 @@ export default function ManagerGUI() {
                                 }
                                 
                                 // If inputs are valid call update function
-                                updateEmployee(editableTemp);
-                                alert("Employee information has been updated");
+                                updateMenuItem(editableTemp, selectedMenuItem.item_name);
+                                alert("Menu item has been updated");
 
                                 // Close modal once done
                                 handleClose();

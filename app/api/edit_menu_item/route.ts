@@ -26,7 +26,7 @@ function getPool() {
   return globalForPg.menuItemsPool;
 }
 
-async function updateMenuItem(item, og) {
+async function updateMenuItem(item, ogName) {
     const pool = getPool();
     const result = await pool.query(
         `
@@ -34,7 +34,7 @@ async function updateMenuItem(item, og) {
         SET item_name = $1, price = $2, inventory_cost = $3
         WHERE item_name = $4
         `,
-        [item.item_name, item.price, item.inventory_cost, og]
+        [item.item_name, item.price, item.inventory_cost, ogName]
     );
 
     return result.rowCount;
