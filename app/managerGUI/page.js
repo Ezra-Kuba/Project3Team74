@@ -277,11 +277,11 @@ export default function ManagerGUI() {
     );
   };
 
-  const [clickedEmployee, setClickedEmployee] = useState(null);
+  const [clickedItem, setClickedItem] = useState(null);
   // Universal modal handlers
   const [openModal, setOpenModal] = useState(null);
   const handleClose = () => setOpenModal(null);
-  const selectedEmployee = employees.find(e => e.employee_id_num === clickedEmployee);
+  const selectedEmployee = employees.find(e => e.employee_id_num === clickedItem);
   const [editableTemp, setEditableTemp] = useState(null);
   // Comparison test for objects, if any values do not match then true is returned
   const hasChanges = (a, b) => Object.keys(a).some(key => b[key] !== a[key]);
@@ -380,6 +380,31 @@ export default function ManagerGUI() {
     price: 0
   };
 
+  const selectedMenuItem = menuItems.find(e => e.item_name === clickedItem);
+
+  async function updateMenuItem(item) {
+    try {
+      const response = await fetch("/api/edit_employee", {
+        method: "PUT",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(employee), // send editableEmployee
+      });
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to update employee information.");
+      }
+
+      // Refresh employee list after the save is made
+      await loadEmployees();
+    }
+
+    // Show popup if an error occurs
+    catch(error){
+      alert(error.message);
+    }
+  }
+
     async function addNewMenu(item) {
     try {
       const response = await fetch("/api/add_menu_item", {
@@ -474,7 +499,13 @@ export default function ManagerGUI() {
 
               <div className="manager-list">
                 {menuItems.map((item) => (
-                  <article key={item.item_name} className="manager-list-card">
+                  <article key={item.item_name}
+                    onClick={() => {
+                        setClickedItem(item.item_name); 
+                        setEditableTemp({...item});
+                        setOpenModal("editMenuItem")
+                      }}
+                      className="manager-list-card">
                     <span className="manager-list-name">{item.item_name}</span>
                     <span className="manager-list-value">
                       Price: ${Number(item.price).toFixed(2)}
@@ -482,6 +513,124 @@ export default function ManagerGUI() {
                   </article>
                 ))}
               </div>
+
+              {/* Edit Menu Item Modal */}
+              {openModal === "editMenuItem" && selectedMenuItem && (
+                <Modal
+                  open={openModal}
+                  onClose={handleClose}
+                  aria-labelledby="Menu Item Information"
+                  aria-describedby="modal-modal-description"
+                >
+                  <Box sx={{...style, width:"400"}}>
+                    <Typography variant="h6" component="h2">
+                      Menu Item Information
+                    </Typography>
+                    <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                      Menu Item Name: <input type="text" 
+                                            value={editableTemp.item_name} 
+                                            style={{width:"100px", border: "1px solid #000"}}
+                                            onChange={(e) => setEditableTemp({...editableTemp, item_name: e.target.value})}
+                                      />
+                      <br></br>
+                      Menu Item Price: $<input  type="number" 
+                                          min="0"
+                                          step=".01"
+                                          value={editableTemp.price} 
+                                          style={{width:"55px", border: "1px solid #000"}}
+                                          onChange={(e) => setEditableTemp({...editableTemp, price: e.target.value})}
+                                />
+                      <br></br>
+                      Inventory Cost: <input  type="text" 
+                                        value={editableTemp.inventory_cost} 
+                                        style={{width:"150px", border: "1px solid #000"}}
+                                        onChange={(e) => setEditableTemp({...editableTemp, inventory_cost: e.target.value})}
+                                />
+                      <br></br>
+                    </Typography>
+                    <div className="managerButtons">
+                      <button className="saveButton" 
+                              disabled = {!hasChanges(selectedMenuItem, editableTemp)}
+                              onClick={() => {
+                                if(editableTemp.item_name === "" || editableTemp.inventory_cost === ""){
+                                  alert("Invalid Input(s): Fields cannot be left blank!");
+                                  return;
+                                }
+
+                                if(!editableTemp.price || editableTemp.price <= 0){
+                                  alert("Invalid Input(s): Price cannot be negative or left blank!");
+                                  return;
+                                }
+                                
+                                // If inputs are valid call update function
+                                updateEmployee(editableTemp);
+                                alert("Employee information has been updated");
+
+                                // Close modal once done
+                                handleClose();
+                              }}>
+                              Save
+                      </button>
+                      <button className="removeButton" 
+                              onClick={() => {
+                                confirm("Are you sure you want to remove this menu item?\nThis action cannot be undone.")
+                                fireEmployee(selectedEmployee);
+                              }}>
+                              Remove Item</button>
+                    </div>
+                  </Box>
+                </Modal>
+              )}
+
+              {/* Hire Employee Modal */}
+              {openModal === "addMenu" && (
+                <Modal
+                  open={openModal}
+                  onClose={handleClose}
+                  aria-labelledby="Enter New Employee Information"
+                  aria-describedby="modal-modal-description"
+                >
+                  <Box sx={{...style, width: 400}}>
+                    <Typography variant="h6" component="h2">
+                      Enter New Employee Information
+                    </Typography>
+                    <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                      Employee Name: <input type="text" 
+                                            style={{width:"100px", border: "1px solid #000"}}
+                                            onChange={(e) => setEditableTemp({...editableTemp, employee_name: e.target.value})}
+                                      />
+                      <br></br>
+                      Manager: <input type="checkbox"
+                                      onChange={(e) => setEditableTemp({...editableTemp, manager: e.target.checked ? 1 : 0})}
+                                />
+                      <br></br>
+                      Password: <input  type="text" 
+                                        style={{width:"50px", border: "1px solid #000"}}
+                                        onChange={(e) => setEditableTemp({...editableTemp, employee_password: e.target.value})}
+                                />
+                      <br></br>
+                    </Typography>
+                    <div className="managerButtons">
+                      <button className="saveButton" 
+                              onClick={() => {
+                                if(editableTemp.employee_name === "" || editableTemp.employee_password === ""){
+                                  alert("Invalid Input(s): Fields cannot be left blank!");
+                                  return;
+                                }
+                                
+                                // If inputs are valid call hire function
+                                hireEmployee(editableTemp);
+                                alert("Employee has been hired!");
+
+                                // Close modal once done
+                                handleClose();
+                              }}>
+                              Save
+                      </button>
+                    </div>
+                  </Box>
+                </Modal>
+              )}
             </>
           ) : null}
 
@@ -513,7 +662,7 @@ export default function ManagerGUI() {
                 {employees.map((item) => (
                   <article key={item.employee_name} 
                     onClick={() => {
-                      setClickedEmployee(item.employee_id_num); 
+                      setClickedItem(item.employee_id_num); 
                       setEditableTemp({...item});
                       setOpenModal("editEmployee")
                     }}
@@ -523,6 +672,7 @@ export default function ManagerGUI() {
                   </article>
                 ))}
               </div>
+
               {/* Edit Employee Modal */}
               {openModal === "editEmployee" && selectedEmployee && (
                 <Modal
