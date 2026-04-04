@@ -422,7 +422,7 @@ export default function ManagerGUI() {
       }
 
       // Refresh menu item list after the save is made
-      await loadEmployees();
+      await loadMenuItems();
     }
 
     // Show popup if an error occurs
@@ -608,45 +608,53 @@ export default function ManagerGUI() {
                 </Modal>
               )}
 
-              {/* Hire Employee Modal */}
+              {/* Add New Menu Item Modal */}
               {openModal === "addMenu" && (
                 <Modal
                   open={openModal}
                   onClose={handleClose}
-                  aria-labelledby="Enter New Employee Information"
+                  aria-labelledby="Enter New Menu Item Information"
                   aria-describedby="modal-modal-description"
                 >
                   <Box sx={{...style, width: 400}}>
                     <Typography variant="h6" component="h2">
-                      Enter New Employee Information
+                      Enter New Menu Item Information
                     </Typography>
                     <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                      Employee Name: <input type="text" 
+                       Menu Item Name: <input type="text" 
                                             style={{width:"100px", border: "1px solid #000"}}
-                                            onChange={(e) => setEditableTemp({...editableTemp, employee_name: e.target.value})}
+                                            onChange={(e) => setEditableTemp({...editableTemp, item_name: e.target.value})}
                                       />
                       <br></br>
-                      Manager: <input type="checkbox"
-                                      onChange={(e) => setEditableTemp({...editableTemp, manager: e.target.checked ? 1 : 0})}
+                      Menu Item Price: $<input  type="number" 
+                                          min="0"
+                                          step=".01"
+                                          style={{width:"55px", border: "1px solid #000"}}
+                                          onChange={(e) => setEditableTemp({...editableTemp, price: e.target.value})}
                                 />
                       <br></br>
-                      Password: <input  type="text" 
-                                        style={{width:"50px", border: "1px solid #000"}}
-                                        onChange={(e) => setEditableTemp({...editableTemp, employee_password: e.target.value})}
+                      Inventory Cost: <input  type="text" 
+                                        style={{width:"150px", border: "1px solid #000"}}
+                                        onChange={(e) => setEditableTemp({...editableTemp, inventory_cost: e.target.value})}
                                 />
                       <br></br>
                     </Typography>
                     <div className="managerButtons">
                       <button className="saveButton" 
                               onClick={() => {
-                                if(editableTemp.employee_name === "" || editableTemp.employee_password === ""){
+                                if(editableTemp.item_name === "" || editableTemp.inventory_cost === ""){
                                   alert("Invalid Input(s): Fields cannot be left blank!");
+                                  return;
+                                }
+
+                                if(!editableTemp.price || editableTemp.price <= 0){
+                                  alert("Invalid Input(s): Price cannot be negative or left blank!");
                                   return;
                                 }
                                 
                                 // If inputs are valid call hire function
-                                hireEmployee(editableTemp);
-                                alert("Employee has been hired!");
+                                addNewMenu(editableTemp);
+                                alert("Item has been added to the menu!");
 
                                 // Close modal once done
                                 handleClose();
