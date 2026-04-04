@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 export default function Home() {
     const [weather, setWeather] = useState([]);
     const [errorMessage, setErrorMessage] = useState("");
+    const [scale, setScale] = useState(1);
 
     useEffect(() => {
       let isActive = true;
@@ -21,6 +22,34 @@ export default function Home() {
       loadWeather();
       return () => { isActive = false; };
     }, []);
+
+    // export default function Component(){
+    //   const [scale, setScale] = useState(1);
+
+    //   useEffect(() => {
+    //     document.documentElement.style.setProperty("--fontScale", scale);
+    //   }, [scale]);
+
+    //   return(
+    //     <div className="slidecontainer">
+    //       <label htmlFor ="slider">Font Size:</label>
+    //       <input type="range" min="0.5" max="2" step = "0.1" value={scale} onChange={(e) => setScale(e.target.value)}/>
+    //     </div>
+    //   );
+
+    useEffect(() => {
+      document.documentElement.style.setProperty("--fontScale", scale);
+    }, [scale]);
+
+
+    // useEffect(() => {
+    //   const slider = document.getElementById("slider");
+    //   const root = document.documentElement;
+
+    //   slider.addEventListener("input", (e) => {
+    //     root.style.setProperty("--fontScale", e.target.value);
+    //   });
+    // }, []);
 
   return (
     <main className="menu-page">
@@ -70,7 +99,8 @@ export default function Home() {
         </button>
         <p>This is a demo of the accessibility features. In the full version, this slider would adjust the font size.</p>
         <div className="slidecontainer">
-          {/* <input type="range" min="1" max="100" value="50" className="slider" id="myRange"> */}
+          <label htmlFor ="slider">Font Size:</label>
+          <input type="range" min="0.5" max="2" step="0.1" value={scale} onChange={(e) => setScale(e.target.value)} id="slider"/>
         </div>
       </section>
     </main>
