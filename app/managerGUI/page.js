@@ -445,7 +445,7 @@ export default function ManagerGUI() {
         throw new Error(data.error || "Failed to add new menu item.");
       }
 
-      // Refresh employee list after the save is made
+      // Refresh menu after the save is made
       await loadMenuItems();
     }
 
@@ -454,7 +454,7 @@ export default function ManagerGUI() {
       alert(error.message);
     }
   }
-
+  
   const selectedInventoryItem = inventoryItems.find(e => e.inventory_item === clickedItem);
 
   // New inventory item template
@@ -480,6 +480,29 @@ export default function ManagerGUI() {
       }
 
       // Refresh menu item list after the save is made
+      await loadInventory();
+    }
+
+    // Show popup if an error occurs
+    catch(error){
+      alert(error.message);
+    }
+  }
+
+  async function addNewInventory(item) {
+    try {
+      const response = await fetch("/api/add_inventory_item", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(item),
+      });
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to add new inventory item.");
+      }
+
+      // Refresh inventory list after the save is made
       await loadInventory();
     }
 
@@ -637,28 +660,23 @@ export default function ManagerGUI() {
                                           onChange={(e) => setEditableTemp({...editableTemp, stock: e.target.value})}
                                 />
                       <br></br>
-                      Inventory Cost: <input  type="text" 
-                                        style={{width:"150px", border: "1px solid #000"}}
-                                        onChange={(e) => setEditableTemp({...editableTemp, inventory_cost: e.target.value})}
-                                />
-                      <br></br>
                     </Typography>
                     <div className="managerButtons">
                       <button className="saveButton" 
                               onClick={() => {
-                                if(editableTemp.item_name === "" || editableTemp.inventory_cost === ""){
+                                if(editableTemp.inventory_item === ""){
                                   alert("Invalid Input(s): Fields cannot be left blank!");
                                   return;
                                 }
 
-                                if(!editableTemp.price || editableTemp.price <= 0){
+                                if(!editableTemp.stock || editableTemp.stock <= 0){
                                   alert("Invalid Input(s): Price cannot be negative or left blank!");
                                   return;
                                 }
-                                
+
                                 // If inputs are valid call hire function
-                                addNewMenu(editableTemp);
-                                alert("Item has been added to the menu!");
+                                addNewInventory(editableTemp);
+                                alert("Item has been added to inventory!");
 
                                 // Close modal once done
                                 handleClose();
