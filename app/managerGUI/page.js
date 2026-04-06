@@ -906,7 +906,7 @@ export default function ManagerGUI() {
 
               <div className="manager-list">
                 {employees.map((item) => (
-                  <article key={item.employee_name} 
+                  <article key={item.employee_id_num} 
                     onClick={() => {
                       setClickedItem(item.employee_id_num); 
                       setEditableTemp({...item});
