@@ -6,6 +6,7 @@ export default function AboutPage() {
 
     const [weather, setWeather] = useState([]);
     const [errorMessage, setErrorMessage] = useState("");
+    const [scale, setScale] = useState(1);
 
     useEffect(() => {
       let isActive = true;
@@ -22,6 +23,10 @@ export default function AboutPage() {
       return () => { isActive = false; };
     }, []);
 
+    useEffect(() => {
+      document.documentElement.style.setProperty("--fontScale", scale);
+    }, [scale]);
+
   return (
     <main className="about-page">
     <nav class="navbar">
@@ -35,6 +40,10 @@ export default function AboutPage() {
           </p>
           </>
         )}
+        </div>
+        <div className="slidecontainer">
+          <label htmlFor ="slider">Font Size:</label>
+          <input type="range" min="0.5" max="2" step="0.1" value={scale} onChange={(e) => setScale(e.target.value)} id="slider"/>
         </div>
         <ul class="nav-links">
           <li><a className="nav-bar-items" href="/about">About</a></li>
