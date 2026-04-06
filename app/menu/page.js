@@ -82,7 +82,7 @@ export default function MenuGUI() {
       
       <section className="menu-title" aria-labelledby="menu-title">
         <h1 id="menu-title">Menu Page</h1>
-        <p className="menu-copy">This page is not done, but this is where we will begin implementing a menu page. <br></br>That way we can just link it to other pages when the login ect. features are done.</p>
+        <p className="menu-copy">This our food. Supa Yummi Yes! <br></br></p>
       </section>
 
       <section className="menu-mainScreen">
