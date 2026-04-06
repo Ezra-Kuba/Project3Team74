@@ -4,7 +4,25 @@ import { useEffect, useState } from "react";
 
 export default function CashierGUI() {
   const [items, setItems] = useState([]);
+  const [weather, setWeather] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
+  const [scale, setScale] = useState(1);
+
+
+  useEffect(() => {
+    let isActive = true;
+    async function loadWeather() {
+      try {
+        const response = await fetch("/api/weather", { cache: "no-store" });
+        const data = await response.json();
+        if (isActive && response.ok) setWeather(data);
+      } catch (err) {
+        if (isActive) console.error("Weather failed to load.");
+      }
+    }
+    loadWeather();
+    return () => { isActive = false; };
+  }, []);
 
   useEffect(() => {
     let isActive = true;
@@ -73,6 +91,10 @@ export default function CashierGUI() {
 
   const total = orderItems.reduce((sum, item) => sum + parseFloat(item.price), 0).toFixed(2);
 
+  useEffect(() => {
+      document.documentElement.style.setProperty("--fontScale", scale);
+    }, [scale]);
+
   return (
     <main className="customer-pos-page">
       <aside className="customer-sidebar">
@@ -83,6 +105,30 @@ export default function CashierGUI() {
       </aside>
 
       
+      <nav className="navbar">
+        <div className="logo">Supa Yummi Boba</div>
+        <div className="weather">
+        {weather.length > 0 && (
+          <>
+          {/* <h2>Temperature: {weather[0].temp}°F</h2> */}
+          <p>Chance of Rain: {weather[0].rainChance}%, 
+            Current Temperature:{weather[0].temp}°F
+          </p>
+          </>
+        )}
+        </div>
+        <div className="slidecontainer">
+          <label htmlFor ="slider">Font Size:</label>
+          <input type="range" min="0.5" max="2" step="0.1" value={scale} onChange={(e) => setScale(e.target.value)} id="slider"/>
+        </div>
+        <ul className="nav-links">
+          {/* <li><a className="nav-bar-items" href="/">Home</a></li> */}
+          <li><a className="nav-bar-items" href="/about">About</a></li>
+          <li><a className="nav-bar-items" href="/menu">Menu</a></li>
+          <li><a className="nav-bar-items" href="/contact">Contact</a></li>
+          <li><a className="nav-bar-items" href="/login">Login</a></li>
+        </ul>
+      </nav>
 
       <section className="customer-menu-section">
         <h1 className="customer-menu-title">Cashier Menu</h1>

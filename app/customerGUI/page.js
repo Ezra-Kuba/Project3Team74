@@ -6,6 +6,7 @@ export default function CustomerGUI() {
   const [items, setItems] = useState([]);
   const [weather, setWeather] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
+  const [scale, setScale] = useState(1);
 
   useEffect(() => {
     let isActive = true;
@@ -64,6 +65,10 @@ export default function CustomerGUI() {
 
   const total = orderItems.reduce((sum, item) => sum + parseFloat(item.price), 0).toFixed(2);
 
+  useEffect(() => {
+      document.documentElement.style.setProperty("--fontScale", scale);
+    }, [scale]);
+
   return (
     <main className="customer-pos-page">
       <aside className="customer-sidebar">
@@ -87,6 +92,10 @@ export default function CustomerGUI() {
           </p>
           </>
         )}
+        </div>
+        <div className="slidecontainer">
+          <label htmlFor ="slider">Font Size:</label>
+          <input type="range" min="0.5" max="2" step="0.1" value={scale} onChange={(e) => setScale(e.target.value)} id="slider"/>
         </div>
         <ul className="nav-links">
           {/* <li><a className="nav-bar-items" href="/">Home</a></li> */}

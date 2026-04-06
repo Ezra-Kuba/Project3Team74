@@ -69,6 +69,11 @@ export default function Home() {
           </>
         )}
         </div>
+        <div className="slidecontainer">
+          <label htmlFor ="slider">Font Size:</label>
+          <input type="range" min="0.5" max="2" step="0.1" value={scale} onChange={(e) => setScale(e.target.value)} id="slider"/>
+        </div>
+
         <ul className="nav-links">
           <li><a className="nav-bar-items" href="/">Home</a></li>
           <li><a className="nav-bar-items" href="/about">About</a></li>
@@ -97,11 +102,6 @@ export default function Home() {
         <button >
           Toggle High Contrast
         </button>
-        <p>This is a demo of the accessibility features. In the full version, this slider would adjust the font size.</p>
-        <div className="slidecontainer">
-          <label htmlFor ="slider">Font Size:</label>
-          <input type="range" min="0.5" max="2" step="0.1" value={scale} onChange={(e) => setScale(e.target.value)} id="slider"/>
-        </div>
       </section>
     </main>
   );
