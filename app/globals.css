@@ -559,3 +559,7 @@ h1 {
   padding: 10px;
   background-color: #f8f8f8;
 }
+
+.manager-list-card:hover{
+  background-color: lightgray;
+}
