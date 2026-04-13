@@ -23,7 +23,7 @@
     "@emotion/styled": "^11.14.1",
     "@mui/material": "^7.3.9",
     "@react-oauth/google": "^0.12.2",
-    "next": "^15.5.14",
+    "next": "^16.2.3",
     "openmeteo": "^1.2.3",
     "pg": "^8.16.3",
     "react": "^19.1.0",
