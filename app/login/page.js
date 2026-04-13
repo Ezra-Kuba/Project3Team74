@@ -2,7 +2,7 @@
 
 import { GoogleLogin, googleLogout } from "@react-oauth/google";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useGoogleOAuthReady } from "../google-oauth-provider";
 
 const STORAGE_KEY = "google-oauth-user";
@@ -62,7 +62,8 @@ function decodeJwt(token) {
   return JSON.parse(json);
 }
 
-export default function LoginPage() {
+// 1. Renamed from "export default function LoginPage()" to "function LoginContent()"
+function LoginContent() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -264,5 +265,14 @@ export default function LoginPage() {
         </div>
       </section>
     </main>
+  );
+}
+
+// 2. New default export wrapper
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<div>Loading login...</div>}>
+      <LoginContent />
+    </Suspense>
   );
 }
