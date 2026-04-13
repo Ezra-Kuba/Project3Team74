@@ -29,8 +29,8 @@ export default function AboutPage() {
 
   return (
     <main className="about-page">
-    <nav class="navbar">
-        <div class="logo">Supa Yummi Boba</div>
+    <nav className="navbar">
+        <div className="logo">Supa Yummi Boba</div>
         <div className="weather">
         {weather.length > 0 && (
           <>
@@ -45,7 +45,7 @@ export default function AboutPage() {
           <label htmlFor ="slider">Font Size:</label>
           <input type="range" min="0.5" max="2" step="0.1" value={scale} onChange={(e) => setScale(e.target.value)} id="slider"/>
         </div>
-        <ul class="nav-links">
+        <ul className="nav-links">
           <li><a className="nav-bar-items" href="/about">About</a></li>
           <li><a className="nav-bar-items" href="/menu">Menu</a></li>
           <li><a className="nav-bar-items" href="/contact">Contact</a></li>
