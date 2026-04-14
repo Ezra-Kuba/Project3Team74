@@ -86,7 +86,7 @@ export default function Home() {
 
       <section className="menu-hero" aria-labelledby="menu-title">
         <p className="menu-label"></p>
-        <h1 id="menu-title">Authentic PseudoAsian Cuisine<br></br>You likes yes!</h1>
+        <h1 id="menu-title">Authentic PseudoAsian Boba!<br></br>You likes yes!</h1>
       </section>
 
       <section className="menu-img">
