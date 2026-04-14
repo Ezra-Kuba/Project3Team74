@@ -37,7 +37,7 @@ function getDestinationPath(loginRecord, fallbackRole) {
   }
 
   if (role === "admin") {
-    return "/admin";
+    return "/login";
   }
 
   return "/customerGUI";
