@@ -5,6 +5,7 @@
 //   title: "Menu Page",
 // };
 
+import Link from "next/link";
 import { useState, useEffect } from "react";
 
 export default function MenuGUI() {
@@ -60,8 +61,8 @@ export default function MenuGUI() {
 
   return (
     <main className="menu-page">
-      <nav class="navbar">
-        <div class="logo">Supa Yummi Boba</div>
+      <nav className="navbar">
+        <Link className="logo" href="/">Supa Yummi Boba</Link>
         <div className="weather">
         {weather.length > 0 && (
           <>
@@ -74,7 +75,7 @@ export default function MenuGUI() {
         </div>
         <ul className="nav-links">
           <li><a className="nav-bar-items" href="/about">About</a></li>
-          <li><a className="nav-bar-items" href="/menu">Menu</a></li>
+          <li><a className="nav-bar-items" href="/customerGUI">Menu</a></li>
           <li><a className="nav-bar-items" href="/contact">Contact</a></li>
           <li><a className="nav-bar-items" href="/login">Login</a></li>
         </ul>

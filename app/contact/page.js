@@ -24,8 +24,8 @@ export default function ContactPage() {
 
   return (
     <main className="about-page">
-    <nav class="navbar">
-        <div class="logo">Supa Yummi Boba</div>
+    <nav className="navbar">
+        <Link className="logo" href="/">Supa Yummi Boba</Link>
         <div className="weather">
         {weather.length > 0 && (
           <>
@@ -36,9 +36,9 @@ export default function ContactPage() {
           </>
         )}
         </div>
-        <ul class="nav-links">
+        <ul className="nav-links">
           <li><a className="nav-bar-items" href="/about">About</a></li>
-          <li><a className="nav-bar-items" href="/menu">Menu</a></li>
+          <li><a className="nav-bar-items" href="/customerGUI">Menu</a></li>
           <li><a className="nav-bar-items" href="/contact">Contact</a></li>
           <li><a className="nav-bar-items" href="/login">Login</a></li>
         </ul>
@@ -46,12 +46,12 @@ export default function ContactPage() {
     <section className="image and paragraph">
         <h1>Contact info</h1>
         <img src="/image.png" alt="Our founders in their natrual habitat"></img>
-        <ul class ="contactBar">
-            <li class="contactItemList"><a class = "contactItems" href="jvashen@tamu.edu">Jesse Ashen</a></li>
-            <li class="contactItemList"><a class = "contactItems" href="jorgeoliver909@tamu.edu">Jorge Lebron Oliver</a></li>
-            <li class="contactItemList"><a class = "contactItems" href="rodroman@tamu.edu">Roman Rodriguez</a></li>
-            <li class="contactItemList"><a class = "contactItems" href="rohakb@tamu.edu">Rohak Brahma</a></li>
-            <li class="contactItemList"><a class = "contactItems" href="ezra_k234@tamu.edu">Ezra Kuba</a></li>
+        <ul className="contactBar">
+            <li className="contactItemList"><a className="contactItems" href="jvashen@tamu.edu">Jesse Ashen</a></li>
+            <li className="contactItemList"><a className="contactItems" href="jorgeoliver909@tamu.edu">Jorge Lebron Oliver</a></li>
+            <li className="contactItemList"><a className="contactItems" href="rodroman@tamu.edu">Roman Rodriguez</a></li>
+            <li className="contactItemList"><a className="contactItems" href="rohakb@tamu.edu">Rohak Brahma</a></li>
+            <li className="contactItemList"><a className="contactItems" href="ezra_k234@tamu.edu">Ezra Kuba</a></li>
         </ul>
     </section>
     </main>

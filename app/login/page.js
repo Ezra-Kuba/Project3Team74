@@ -2,7 +2,7 @@
 
 import { GoogleLogin, googleLogout } from "@react-oauth/google";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
-import { useEffect, useState, Suspense } from "react";
+import { useEffect, useState } from "react";
 import { useGoogleOAuthReady } from "../google-oauth-provider";
 
 const STORAGE_KEY = "google-oauth-user";
@@ -62,8 +62,7 @@ function decodeJwt(token) {
   return JSON.parse(json);
 }
 
-// 1. Renamed from "export default function LoginPage()" to "function LoginContent()"
-function LoginContent() {
+export default function LoginPage() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -125,8 +124,8 @@ function LoginContent() {
     
   }
 
-  const goToEmployee = () => {
-    const newPath = pathname.replace("/login", "/employeeGUI");
+  const goToCashier = () => {
+    const newPath = pathname.replace("/login", "/cashierGUI");
     router.push(newPath);
   }
 
@@ -228,8 +227,8 @@ function LoginContent() {
               <button onClick = {() => goToManager()}>
                 Manager Screen
               </button>
-              <button onClick = {() => goToEmployee()}>
-                Employee Screen
+              <button onClick = {() => goToCashier()}>
+                Cashier Screen
               </button>
               <p style={{ margin: 0, color: "#4b5563" }}>
                 Use logout below to switch accounts.
@@ -265,14 +264,5 @@ function LoginContent() {
         </div>
       </section>
     </main>
-  );
-}
-
-// 2. New default export wrapper
-export default function LoginPage() {
-  return (
-    <Suspense fallback={<div>Loading login...</div>}>
-      <LoginContent />
-    </Suspense>
   );
 }

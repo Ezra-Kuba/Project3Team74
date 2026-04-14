@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function CashierGUI() {
@@ -61,6 +62,10 @@ export default function CashierGUI() {
     setOrderItems((prevItems) => [...prevItems, { itemName, price }]);
   }
 
+  function removeFromOrder(indexToRemove) {
+    setOrderItems((prevItems) => prevItems.filter((item, index) => index !== indexToRemove));
+  }
+
   async function placeOrder(){
     try{
       const response = await fetch("/api/place_order", {
@@ -106,7 +111,7 @@ export default function CashierGUI() {
 
       
       <nav className="navbar">
-        <div className="logo">Supa Yummi Boba</div>
+        <Link className="logo" href="/">Supa Yummi Boba</Link>
         <div className="weather">
         {weather.length > 0 && (
           <>
@@ -124,7 +129,7 @@ export default function CashierGUI() {
         <ul className="nav-links">
           {/* <li><a className="nav-bar-items" href="/">Home</a></li> */}
           <li><a className="nav-bar-items" href="/about">About</a></li>
-          <li><a className="nav-bar-items" href="/menu">Menu</a></li>
+          <li><a className="nav-bar-items" href="/customerGUI">Menu</a></li>
           <li><a className="nav-bar-items" href="/contact">Contact</a></li>
           <li><a className="nav-bar-items" href="/login">Login</a></li>
         </ul>
@@ -159,7 +164,7 @@ export default function CashierGUI() {
             <p className="customer-order-placeholder">No items selected yet.</p>
           ) : (
             orderItems.map((item, index) => (
-              <p key={index}> {item.itemName} - ${Number(item.price).toFixed(2)}</p>
+              <p key={index}> {item.itemName} - ${Number(item.price).toFixed(2)} <button onClick={() => removeFromOrder(index)} style={{marginLeft: '8px', background: 'none', border: 'none', cursor: 'pointer', color: 'inherit', fontSize: '1.2em', padding: '0', lineHeight: '1'}}>×</button></p>
             ))
           )}
         </div>

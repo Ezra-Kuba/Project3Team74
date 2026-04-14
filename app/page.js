@@ -1,5 +1,6 @@
 "use client";
 
+import HomeChatbot from "./components/HomeChatbot";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -58,7 +59,7 @@ export default function Home() {
       </header> */}
 
       <nav className="navbar">
-        <div className="logo">Supa Yummi Boba</div>
+        <Link className="logo" href="/">Supa Yummi Boba</Link>
         <div className="weather">
         {weather.length > 0 && (
           <>
@@ -77,7 +78,7 @@ export default function Home() {
         <ul className="nav-links">
           <li><a className="nav-bar-items" href="/">Home</a></li>
           <li><a className="nav-bar-items" href="/about">About</a></li>
-          <li><a className="nav-bar-items" href="/menu">Menu</a></li>
+          <li><a className="nav-bar-items" href="/customerGUI">Menu</a></li>
           <li><a className="nav-bar-items" href="#contact">Contact</a></li>
           <li><a className="nav-bar-items" href="/login">Login</a></li>
         </ul>
@@ -103,6 +104,8 @@ export default function Home() {
           Toggle High Contrast
         </button>
       </section>
+
+      <HomeChatbot />
     </main>
   );
 }
