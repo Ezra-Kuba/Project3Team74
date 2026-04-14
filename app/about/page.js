@@ -30,11 +30,7 @@ export default function AboutPage() {
   return (
     <main className="about-page">
     <nav className="navbar">
-<<<<<<< HEAD
-        <Link className="logo" href="/">Supa Yummi Boba</Link>
-=======
         <div className="logo">Supa Yummi Boba</div>
->>>>>>> 4df5aa6831e78b73b798c52da38da0f367e708c0
         <div className="weather">
         {weather.length > 0 && (
           <>
